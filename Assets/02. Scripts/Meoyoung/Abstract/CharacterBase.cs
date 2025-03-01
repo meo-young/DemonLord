@@ -20,7 +20,8 @@ public class CharacterBase : MonoBehaviour
     public int attackPower;              // 공격력
     public CharacterType characterType;  // 캐릭터 직업
     public bool isAlive;                 // 생존 여부
-    public int currentHealth;  // 현재 체력
+    public int currentHealth;           // 현재 체력
+
 
     protected virtual void Start()
     {
@@ -175,6 +176,16 @@ public class CharacterBase : MonoBehaviour
         {
             damage = (int)(damage * 1.5f);
         }
-}
+    }
 
+    // 캐릭터 데이터로 초기화하는 메서드 추가
+    public virtual void SetCharacterData(CharacterData data)
+    {
+        characterName = data.characterName;
+        characterType = data.characterType;
+        maxHealth = data.maxHealth;
+        attackPower = data.attackPower;
+        currentHealth = maxHealth;
+        isAlive = true;
+    }
 }
