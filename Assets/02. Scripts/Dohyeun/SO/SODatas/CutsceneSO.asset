@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28428d44bba7c4a4db797cfe130eeca2, type: 3}
-  m_Name: CutsceneSO
+  m_Name: CutSceneSO
   m_EditorClassIdentifier: 
   CutsceneDatas:
   - Id: CutSceneTest
@@ -27,7 +27,9 @@ MonoBehaviour:
       - Text4
       - Text5
       - Text6
-  - Id: 
-    OneCutscenes: []
-  - Id: 
-    OneCutscenes: []
+    - Background: {fileID: 8456160606961268066, guid: b8b9b8ab2618c924692042e24d68853b, type: 3}
+      TextPosition: {x: 500, y: -500}
+      Texts:
+      - Text7\n
+      - Text8\n
+      - Text9

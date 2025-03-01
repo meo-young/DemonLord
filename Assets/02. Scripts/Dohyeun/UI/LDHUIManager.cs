@@ -56,7 +56,7 @@ public class LDHUIManager : LDHSingletonBehavior<LDHUIManager>
             Debug.LogError($"{uiType} is already open.");
             return;
         }
-        var siblingIndex = UICanvasTrs.childCount - 1;
+        var siblingIndex = UICanvasTrs.childCount;
         ui.Init(UICanvasTrs);
         ui.transform.SetSiblingIndex(siblingIndex);
         ui.gameObject.SetActive(true);
