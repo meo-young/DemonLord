@@ -104,7 +104,7 @@ public class LDHUIManager : LDHSingletonBehavior<LDHUIManager>
             m_FrontUI.CloseUI(true);
         }
     }
-    public void ShowCutscene(string id)
+    public void ShowCutScene(string id)
     {
         CutSceneUIData uiData = new CutSceneUIData() { Id = id };
         OpenUI<CutSceneUI>(uiData);
