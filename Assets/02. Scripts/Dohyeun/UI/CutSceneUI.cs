@@ -8,14 +8,12 @@ public class CutSceneUIData : LDHBaseUIData
 {
     public string Id;
 }
-
 public class CutSceneUI : LDHBaseUI
-{// 엥 
+{
     private CutSceneUIData m_CutsceneUIData;
     private Queue<OneCutSceneData> m_CutsceneDatas;
     private Queue<string> m_Texts = new Queue<string>();
     private OneCutSceneData m_CurrentCutsceneData;
-    private bool m_SaveGoodsState;
 
     [SerializeField] private Image m_Background;
     [SerializeField] private TextMeshProUGUI m_Text;
@@ -24,7 +22,7 @@ public class CutSceneUI : LDHBaseUI
     {
         base.SetInfo(uiData);
         m_CutsceneUIData = uiData as CutSceneUIData;
-        m_CutsceneDatas = new Queue<OneCutSceneData>(LDHUIManager.Instance.GetCutsceneData(m_CutsceneUIData.Id).OneCutscenes);
+        m_CutsceneDatas = new Queue<OneCutSceneData>(LDHUIManager.instance.GetCutsceneData(m_CutsceneUIData.Id).OneCutscenes);
         SetNext();
     }
     public bool SetNext()

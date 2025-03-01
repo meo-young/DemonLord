@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public enum BGM // 네이밍 = 파일명
@@ -14,10 +15,53 @@ public enum SFX // 네이밍 = 파일명
     sfx_test_click,
     COUNT,
 }
-public class AudioManager : LDHSingletonBehavior<AudioManager>
+public class AudioManager : MonoBehaviour
 {
+
+    #region 싱글톤 공통
+    public static AudioManager instance;
+
+    private bool isDestroyOnLoad = false;
+    private bool isInitialized = false;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            if (!isDestroyOnLoad)
+            {
+                if (transform.parent)
+                    DontDestroyOnLoad(transform.parent);
+                else
+                    DontDestroyOnLoad(this);
+            }
+        }
+        else
+        {
+            if (instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
+        if (!isInitialized)
+            instance.Initialize();
+        isInitialized = true;
+    }
+    #endregion
+    private void Initialize()
+    {
+        // 게임 시작 시, 데이터 불러오기
+        LoadBGMPlayer();
+        LoadSFXPlayer();
+        foreach (AudioSource audioSource in bgmPlayer.Values)
+            audioSource.volume = 0f;
+        foreach (AudioSource audioSource in sfxPlayer.Values)
+            audioSource.volume = masterVolume;
+    }
+
     // Resources 내 데이터 경로
-    private const string AUDIO_PATH = "DohyeunTest/Audio";
+    private string resourcesPath = Path.Combine(SubUtils.BASE_PATH,SubUtils.AUDIO_PATH);
 
     // 게임오브젝트의 Parents
     public Transform BGMTrs;
@@ -32,23 +76,12 @@ public class AudioManager : LDHSingletonBehavior<AudioManager>
     //public float bgmMaxVolume = 1f;
     //public float sfxMaxVolume = 1f;
 
-    protected override void InitChild()
-    {
-        // 게임 시작 시, 데이터 불러오기
-        LoadBGMPlayer();
-        LoadSFXPlayer();
-        foreach (AudioSource audioSource in bgmPlayer.Values)
-            audioSource.volume = 0f;
-        foreach (AudioSource audioSource in sfxPlayer.Values)
-            audioSource.volume = masterVolume;
-    }
-
     private void LoadBGMPlayer()
     {
         for (int i = 0; i < (int)BGM.COUNT; i++)
         {
             var audioName = ((BGM)i).ToString();
-            var pathStr = $"{AUDIO_PATH}/{audioName}";
+            var pathStr = Path.Combine(resourcesPath, audioName);
             var audioClip = Resources.Load(pathStr, typeof(AudioClip)) as AudioClip;
             if (!audioClip)
             {
@@ -71,7 +104,7 @@ public class AudioManager : LDHSingletonBehavior<AudioManager>
         for (int i = 0; i < (int)SFX.COUNT; i++)
         {
             var audioName = ((SFX)i).ToString();
-            var pathStr = $"{AUDIO_PATH}/{audioName}";
+            var pathStr = Path.Combine(resourcesPath, audioName);
             var audioClip = Resources.Load(pathStr, typeof(AudioClip)) as AudioClip;
             if (!audioClip)
             {

@@ -16,8 +16,6 @@ public class LDHBaseUI : MonoBehaviour
 
     public virtual void Init(Transform anchor)
     {
-        //Logger.Info();
-
         m_OnShow = null;
         m_OnClose = null;
 
@@ -31,7 +29,6 @@ public class LDHBaseUI : MonoBehaviour
     }
     public virtual void SetInfo(LDHBaseUIData uiData)
     {
-        //Logger.Info();
         m_OnShow = uiData.OnShow;
         m_OnClose = uiData.OnClose;
     }
@@ -52,7 +49,7 @@ public class LDHBaseUI : MonoBehaviour
         }
         m_OnClose = null;
 
-        LDHUIManager.Instance.CloseUI(this);
+        LDHUIManager.instance.CloseUI(this);
     }
     public virtual void OnClickCloseButton()
     {
