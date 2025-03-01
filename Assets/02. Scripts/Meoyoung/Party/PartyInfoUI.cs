@@ -6,6 +6,7 @@ public class PartyInfoUI : MonoBehaviour
     public static PartyInfoUI instance;
 
     public GameObject characterInfoPrefab;
+    
 
     private void Awake()
     {

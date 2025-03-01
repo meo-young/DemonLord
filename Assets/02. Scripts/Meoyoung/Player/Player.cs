@@ -4,7 +4,6 @@ public class Player : CharacterBase
 {
     // @TODO : 권능, 특성 추가
 
-
     protected override void Start()
     {
         base.Start();
