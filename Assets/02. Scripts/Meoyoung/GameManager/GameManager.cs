@@ -1,0 +1,107 @@
+using UnityEngine;
+
+public class GameManager : MonoBehaviour
+{
+    public static GameManager instance;
+
+    [Header("현재 주사위 결과")]
+    [SerializeField] private DiceType currentDiceResult;
+
+    [Header("현재 권능")]
+    [SerializeField] private IWarrant currentWarrant;
+
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        // 변수 초기화
+        currentDiceResult = DiceType.None;
+        currentWarrant = null;
+    }
+
+
+#region 주사위
+    // 주사위의 결과를 설정
+    public void SetCurrentDiceResult(DiceType result)
+    {
+        currentDiceResult = result;
+    }
+
+    // 현재 주사위 결과 반환
+    public DiceType GetCurrentDiceResult()
+    {
+        return currentDiceResult;
+    }
+
+    // 주사위 굴리기
+    public void RollDice()
+    {
+        if(IsDiceRolled())
+        {
+            Debug.LogError("주사위를 이미 굴렸습니다.");
+            return;
+        }
+        else
+        {
+            currentDiceResult = Dice.instance.Roll();
+            Debug.LogError($"주사위 결과 : {currentDiceResult}");
+        }
+    }
+
+    // 주사위 굴리기 여부 반환
+    public bool IsDiceRolled()
+    {
+        return currentDiceResult != DiceType.None;
+    }
+#endregion
+
+#region 권능
+    // 현재 권능 설정
+    public void SetCurrentWarrant(WarrantType warrantType)
+    {
+        // 기존 권능이 있다면 제거
+        if (currentWarrant != null)
+        {
+            return;
+        }
+
+        // 권능 타입에 따른 권능 추가
+        switch (warrantType)
+        {
+            case WarrantType.Dice:
+                currentWarrant = gameObject.AddComponent<DiceWarrant>();
+                break;
+            case WarrantType.Heal:
+                currentWarrant = gameObject.AddComponent<HealWarrant>();
+                break;
+            case WarrantType.Random:
+                currentWarrant = gameObject.AddComponent<RandomWarrant>();
+                break;
+        }
+    }
+
+    // 현재 권능 반환
+    public IWarrant GetCurrentWarrant()
+    {
+        return currentWarrant;
+    }
+
+    // 권능 사용
+    public void UseWarrant()
+    {
+        currentWarrant.UseWarrant();
+    }
+#endregion
+}

@@ -15,25 +15,32 @@ public enum CharacterType
 
 public class CharacterBase : MonoBehaviour
 {
-    [SerializeField] protected string characterName;         // 캐릭터 이름 
-    [SerializeField] protected int maxHealth;                // 최대 체력
-    [SerializeField] protected int attackPower;              // 공격력
-    [SerializeField] protected CharacterType characterType;  // 캐릭터 직업
-
-    private int currentHealth;  // 현재 체력
-    private Dice dice;          // 주사위 클래스
-
-    private void Awake() 
-    {
-        dice = GetComponent<Dice>();
-    }
+    public string characterName;         // 캐릭터 이름 
+    public int maxHealth;                // 최대 체력
+    public int attackPower;              // 공격력
+    public CharacterType characterType;  // 캐릭터 직업
+    public bool isAlive;                 // 생존 여부
+    public int currentHealth;  // 현재 체력
 
     protected virtual void Start()
     {
         // 체력 초기화
         currentHealth = maxHealth;
 
-        Attack(this);
+        // 생존 여부 초기화
+        isAlive = true;
+    }
+
+    public virtual void GetDamage(int damage)
+    {
+        // 데미지 적용
+        currentHealth -= damage;
+        
+        // 체력이 0이하일 경우 사망 처리
+        if(currentHealth <= 0)
+        {
+            OnDeath();
+        }
     }
 
     public virtual void Attack(CharacterBase target)
@@ -45,34 +52,41 @@ public class CharacterBase : MonoBehaviour
         int damage = attackPower;
 
         // 주사위 굴리기
-        DiceType diceType = dice.Roll();
-        
-        // @TODO : 같은 직업이 있다면 추가 데미지 적용
-        //if(GameManager.instance.party.Find(character => character.characterType == characterType))
+        GameManager.instance.RollDice();
+
+        // 같은 직업이 있다면 추가 데미지 적용
+        ApplySameCharacterTypeDamage(ref damage);
 
         // 상성 적용
         Applycompatibility(target, ref damage);
 
-        // @TODO : 도적이 파티에 존재할 경우 추가 데미지. 게임 매니저에서 도적 여부를 체크하면 될 것 같다.
+        // 도적이 파티에 존재할 경우 추가 데미지
+        ApplyAssassinDamage(ref damage);
 
         // 주사위 타입 적용
-        ApplyDiceResult(diceType, ref damage);
+        ApplyDiceResult(ref damage);
 
         Debug.Log($"{characterName}의 공격 ! {target.characterName}에게 {damage}의 데미지 적용");
 
         // 데미지 적용
-        target.currentHealth -= damage;
+        target.GetDamage(damage);
+    }
 
-        // 체력이 0이하일 경우 사망 처리
-        if(target.currentHealth <= 0)
+    public virtual void Heal(int amount)
+    {
+        // amount 만큼 체력 회복
+        currentHealth += amount;
+        if(currentHealth > maxHealth)
         {
-            target.OnDeath();
+            currentHealth = maxHealth;
         }
     }
+    
 
     protected virtual void OnDeath()
     {
         Debug.Log($"{characterName}이(가) 죽었습니다.");
+        isAlive = false;
     }
 
     private void Applycompatibility(CharacterBase target, ref int damage)
@@ -122,10 +136,10 @@ public class CharacterBase : MonoBehaviour
         }
     }
 
-    private void ApplyDiceResult(DiceType diceType, ref int damage)
+    private void ApplyDiceResult(ref int damage)
     {
         // 주사위 타입에 따라 데미지 변화
-        switch(diceType)
+        switch(GameManager.instance.GetCurrentDiceResult())
         {
             case DiceType.Bad:
                 Debug.Log("주사위 망함");
@@ -140,5 +154,27 @@ public class CharacterBase : MonoBehaviour
                 damage = (int)(damage * 1.5f);
                 break;
         }
+
+        // 주사위 눈 초기화
+        GameManager.instance.SetCurrentDiceResult(DiceType.None);
     }
+
+    private void ApplySameCharacterTypeDamage(ref int damage)
+    {
+        // 같은 직업이 있다면 추가 데미지 적용
+        if(PartyManager.instance.IsSameCharacterTypeInParty(characterType))
+        {
+            damage = (int)(damage * 1.5f);
+        }
+    }
+
+    private void ApplyAssassinDamage(ref int damage)
+    {
+        // 도적이 파티에 존재할 경우 추가 데미지
+        if(PartyManager.instance.IsSameCharacterTypeInParty(CharacterType.Assassin))
+        {
+            damage = (int)(damage * 1.5f);
+        }
+}
+
 }
