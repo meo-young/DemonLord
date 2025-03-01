@@ -13,10 +13,15 @@ public class PartyRecruitUI : MonoBehaviour
         instance = this;
     }   
 
+    [Header("하단 동료모집 패널")]
+    [SerializeField] private GameObject bottomRecruitPanel;
+
     [Header("캐릭터 이미지")]
     [SerializeField] private GameObject[] characterImages;
     [Header("캐릭터 데이터")]
     [SerializeField] private CharacterData[] characterDatas;
+    [Header("캐릭터 체력 UI 프리팹")]
+    [SerializeField] private GameObject healthUIPrefab;
 
     [Header("모집하기 버튼")]
     [SerializeField] private Button recruitBtn;
@@ -24,17 +29,13 @@ public class PartyRecruitUI : MonoBehaviour
     [SerializeField] private TMP_Text recruitResultText;
     [SerializeField] private TMP_Text recruitResultSubText;
 
+    [Header("추가되는 위치")]
+    [SerializeField] private GameObject[] addPositions;
+
     private int currentCharacterIndex = 0;
     private bool isFirstRecruit = true;  // 초기 모집 여부
     private int recruitCount = 0;        // 현재 모집 횟수
 
-    private void Start() 
-    {
-        DeactivateCharacterImages();
-        ShowRecruitPanel();
-        isFirstRecruit = true;   // 시작할 때 초기 모집으로 설정
-        recruitCount = 0;        // 모집 횟수 초기화
-    }
 
     public void OnClickCharacterBtn(int index)
     {
@@ -57,13 +58,28 @@ public class PartyRecruitUI : MonoBehaviour
         if (currentCharacterIndex >= 0 && currentCharacterIndex < characterDatas.Length)
         {
             CharacterData selectedData = characterDatas[currentCharacterIndex];
+            int currentPartySize = PartyManager.instance.GetPartyMemberNum();
             
-            // 새로운 GameObject 생성
-            GameObject characterObject = new GameObject(selectedData.characterName);
+            // 현재 파티 크기를 인덱스로 사용하여 위치 지정
+            GameObject positionObject = addPositions[currentPartySize - 1];
             
             // CharacterBase 컴포넌트 추가 및 데이터 설정
-            CharacterBase newCharacter = characterObject.AddComponent<CharacterBase>();
+            CharacterBase newCharacter = positionObject.AddComponent<CharacterBase>();
             newCharacter.SetCharacterData(selectedData);
+
+            // 체력 UI 프리팹 생성
+            GameObject healthUI = Instantiate(healthUIPrefab, positionObject.transform);
+
+            // 체력 최신화
+            newCharacter.InitUI();
+            
+            // 스프라이트 이미지 설정
+            SpriteRenderer spriteRenderer = positionObject.GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                spriteRenderer = positionObject.AddComponent<SpriteRenderer>();
+            }
+            spriteRenderer.sprite = selectedData.characterSprite;
             
             // 파티에 멤버 추가
             PartyManager.instance.AddMember(newCharacter);
@@ -93,6 +109,7 @@ public class PartyRecruitUI : MonoBehaviour
     {
         // 모집 패널 활성화
         transform.localScale = Vector3.one;
+        bottomRecruitPanel.transform.localScale = Vector3.one;
 
         // 공격 선택지 패널 비활성화
         SelectionUI.instance.transform.localScale = Vector3.zero;
@@ -104,6 +121,7 @@ public class PartyRecruitUI : MonoBehaviour
     {
         // 모집 패널 비활성화
         transform.localScale = Vector3.zero;
+        bottomRecruitPanel.transform.localScale = Vector3.zero;
 
         // 공격 선택지 패널 활성화
         SelectionUI.instance.transform.localScale = Vector3.one;
@@ -141,6 +159,7 @@ public class PartyRecruitUI : MonoBehaviour
         }
 
         // 버튼 비활성화
+        DeactivateCharacterImages();
         SetRecruitButtonTransparency(0.2f);
         recruitBtn.enabled = false;
     }

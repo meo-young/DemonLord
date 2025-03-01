@@ -10,10 +10,7 @@ public class SituationUI : MonoBehaviour
     private void Awake()
     {
         instance = this;
-    }
 
-    private void Start()
-    {
         situationText = transform.GetChild(0).GetComponent<TMP_Text>();
     }
     

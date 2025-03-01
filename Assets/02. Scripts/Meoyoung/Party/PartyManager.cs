@@ -34,6 +34,12 @@ public class PartyManager : MonoBehaviour
         return partyMembers;
     }
 
+    // 특정 직업 캐릭터 반환
+    public CharacterBase GetCharacterByType(CharacterType type)
+    {
+        return partyMembers.Find(member => member.characterType == type);
+    }
+
     // 파티 멤버 수 반환
     public int GetPartyMemberNum()
     {

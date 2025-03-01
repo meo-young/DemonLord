@@ -10,4 +10,7 @@ public class CharacterData : ScriptableObject
     [Header("캐릭터 스탯")]
     public int maxHealth;               // 최대 체력
     public int attackPower;             // 공격력
+
+    [Header("캐릭터 이미지")]
+    public Sprite characterSprite;
 }

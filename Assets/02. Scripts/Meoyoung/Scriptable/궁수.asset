@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: "\uAD81\uC218"
   characterType: 1
-  maxHealth: 100
+  maxHealth: 50
   attackPower: 10
+  characterSprite: {fileID: 21300000, guid: 527cfbfbf7d6889478e5d5d5ddae6e79, type: 3}
