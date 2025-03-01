@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class EffectManager : MonoBehaviour
 {
@@ -57,25 +59,51 @@ public class EffectManager : MonoBehaviour
             EffectDict.Add(go.name, go);
         }
     }
+
     // 파티클 이펙트 Instantiate, 효과 종료 시 Destory
     // TODO:풀링 및 Play로 디벨롭
     public void ShowEffect(string key, Vector3 pos) => ShowEffect(key, (Vector2)pos);
+
     public void ShowEffect(string key, Vector2 pos)
     {
-        Instantiate(EffectDict[key], pos, Quaternion.identity);
-        // 종료 시, Destory는 EffectObject 컴포넌트가 처리하도록 되었음. 풀링으로 디벨롭 시 확인하기
+        if (!EffectDict.ContainsKey(key)) return;
+
+        GameObject effectInstance = Instantiate(EffectDict[key], pos, Quaternion.identity);
+        EffectObject effectObject = effectInstance.GetComponent<EffectObject>();
+        effectObject.IsShowOneTime = true;
+        effectObject.Initialize();
+
+        if (effectObject == null) return;
+    }
+
+    // sec 시간 지속 후 Stop()
+    public void ShowEffect(string key, Vector3 pos, float sec) => ShowEffect(key, (Vector2)pos, sec);
+
+    public void ShowEffect(string key, Vector2 pos, float sec)
+    {
+        if (!EffectDict.ContainsKey(key)) return;
+
+        GameObject effectInstance = Instantiate(EffectDict[key], pos, Quaternion.identity);
+        EffectObject effectObject = effectInstance.GetComponent<EffectObject>();
+        effectObject.IsShowOneTime = false;
+        effectObject.Initialize();
+
+        StartCoroutine(StopEffectAfterTime(effectObject, sec));
+    }
+
+    IEnumerator StopEffectAfterTime(EffectObject effectObject, float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        effectObject.StopEffect();
     }
 
     // 특정 상황에 대응할 액션
     public delegate void ClickAction(string key, Vector3 worldPos);
     public event ClickAction OnScreenClick;
 
-
-    // MouceClick 이펙트
-
-
     void Update()
     {
+        // MouceClick 이펙트
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 worldPos = GetWorldPosition(Input.mousePosition);

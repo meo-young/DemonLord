@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class EffectObject : MonoBehaviour
 {
@@ -6,18 +8,37 @@ public class EffectObject : MonoBehaviour
     private float timer = 0f;
     private ParticleSystem particleSystem;
     private Animator animator;
+    private VisualEffect visualEffect;
 
-    private void OnEnable()
+    // 한 사이클만 실행하고 없앨지
+    [NonSerialized] public bool IsShowOneTime;
+    public void Initialize()
     {
-        if (TryGetComponent(out particleSystem))
+        if (TryGetComponent(out visualEffect))
         {
-            timer = particleSystem.time + 5f;
+            visualEffect.Play();
         }
-        if (TryGetComponent(out animator))
+        if (IsShowOneTime)
         {
-            timer = animator.GetCurrentAnimatorStateInfo(0).length;
+            if (TryGetComponent(out particleSystem))
+            {
+                timer = particleSystem.time;
+            }
+            if (TryGetComponent(out animator))
+            {
+                timer = animator.GetCurrentAnimatorStateInfo(0).length;
+            }
+            if (TryGetComponent(out visualEffect))
+            {
+                timer = 0.2f; // 하드코딩
+            }
+            Invoke(nameof(StopEffect), timer);
         }
-        Destroy(gameObject, timer);
     }
-
+    public void StopEffect()
+    {
+        if (particleSystem) particleSystem.Stop();
+        if (visualEffect) visualEffect.Stop();
+        Destroy(gameObject, 3f);
+    }
 }
