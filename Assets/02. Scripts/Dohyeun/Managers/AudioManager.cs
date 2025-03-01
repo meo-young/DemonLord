@@ -49,15 +49,17 @@ public class AudioManager : MonoBehaviour
         isInitialized = true;
     }
     #endregion
+    // BGM, SFX, 사운드 상태 로드
     private void Initialize()
     {
-        // 게임 시작 시, 데이터 불러오기
+        LoadAudioStatus();
         LoadBGMPlayer();
         LoadSFXPlayer();
         foreach (AudioSource audioSource in bgmPlayer.Values)
             audioSource.volume = 0f;
         foreach (AudioSource audioSource in sfxPlayer.Values)
-            audioSource.volume = masterVolume;
+            audioSource.volume = MasterVolume;
+        if (IsMute) Mute();
     }
 
     // Resources 내 데이터 경로
@@ -72,10 +74,18 @@ public class AudioManager : MonoBehaviour
     private Dictionary<SFX, AudioSource> sfxPlayer = new Dictionary<SFX, AudioSource>();
     private AudioSource currentBGMSource;
 
-    public float masterVolume = 0.8f;
+    public float MasterVolume = 0.8f;
     //public float bgmMaxVolume = 1f;
     //public float sfxMaxVolume = 1f;
+    public bool IsMute = false;
 
+    // 게임 시작 시, 이전 저장했던 볼륨상태와 음소거상태를 로드
+    private void LoadAudioStatus()
+    {
+        MasterVolume = PlayerPrefs.GetFloat("MasterVolume", 0.8f);
+        IsMute = PlayerPrefs.GetInt("IsMute", 0) == 1 ? true : false;
+    }
+    // BGM과 SFX 를 불러오기
     private void LoadBGMPlayer()
     {
         for (int i = 0; i < (int)BGM.COUNT; i++)
@@ -122,7 +132,20 @@ public class AudioManager : MonoBehaviour
             sfxPlayer[(SFX)i] = newAudioSource;
         }
     }
-    
+    // 볼륨 세부 조정
+    public void ChangeMaxVolume(float volume)
+    {
+        MasterVolume = volume;
+
+        currentBGMSource.volume = volume;
+        foreach (var audioSourceItem in sfxPlayer)
+        {
+            audioSourceItem.Value.volume = volume;
+        }
+        PlayerPrefs.SetFloat("MasterVolume", volume);
+        PlayerPrefs.Save();
+    }
+
     // BGM 관리 메서드들
     public void PlayBGM(BGM bgm, bool isFade = false, float fadeSec = 1f)
     {
@@ -134,6 +157,7 @@ public class AudioManager : MonoBehaviour
         if (currentBGMSource)
         {
             if(isFade) yield return CoAudioFadeOut(currentBGMSource, fadeSec);
+            currentBGMSource.volume = 0f;
             currentBGMSource.Stop();
             currentBGMSource = null;
         }
@@ -147,20 +171,41 @@ public class AudioManager : MonoBehaviour
             currentBGMSource = bgmPlayer[bgm];
             currentBGMSource.Play();
             if (isFade) yield return CoAudioFadeIn(currentBGMSource, fadeSec);
-            currentBGMSource.volume = masterVolume;
+            currentBGMSource.volume = MasterVolume;
         }
     }
-    public void PauseBGM()
+    // 일시정지
+    public void PauseBGM(bool isFade = false, float fadeSec = 1f) => StartCoroutine(CoPauseBGM(isFade, fadeSec));
+    IEnumerator CoPauseBGM(bool isFade, float fadeSec)
     {
-        if (currentBGMSource) currentBGMSource.Pause();
+        if (currentBGMSource)
+        {
+            if (isFade) yield return CoAudioFadeOut(currentBGMSource, fadeSec);
+            currentBGMSource.volume = 0f;
+            currentBGMSource.Pause();
+        }
     }
-    public void ResumeBGM()
+    // 재개
+    public void ResumeBGM(bool isFade = false, float fadeSec = 1f) => StartCoroutine(CoResumeBGM(isFade, fadeSec));
+    IEnumerator CoResumeBGM(bool isFade, float fadeSec)
     {
-        if (currentBGMSource) currentBGMSource.UnPause();
+        if (currentBGMSource)
+        {
+            if (isFade) yield return CoAudioFadeIn(currentBGMSource, fadeSec);
+            currentBGMSource.volume = MasterVolume;
+            currentBGMSource.UnPause();
+        }
     }
-    public void StopBGM()
+    // 정지
+    public void StopBGM(bool isFade = false, float fadeSec = 1f) => StartCoroutine(CoStopBGM(isFade, fadeSec));
+    IEnumerator CoStopBGM(bool isFade, float fadeSec)
     {
-        if (currentBGMSource) currentBGMSource.Stop();
+        if (currentBGMSource)
+        {
+            if (isFade) yield return CoAudioFadeOut(currentBGMSource, fadeSec);
+            currentBGMSource.volume = 0f;
+            currentBGMSource.Stop();
+        }
     }
     // SFX 관리 메서드들
     public void PlaySFX(SFX sfx)
@@ -173,64 +218,66 @@ public class AudioManager : MonoBehaviour
         sfxPlayer[sfx].PlayOneShot(sfxPlayer[sfx].clip);
     }
 
-    // TODO: Mute/UnMute 시 Fade 적용에 대해
-    public void Mute() 
+    // Mute, UnMute에 Fade 가능
+    public void Mute(bool isFade = false, float fadeSec = 1f) 
     {
         foreach (var audioSourceItem in bgmPlayer)
         {
-            audioSourceItem.Value.volume = 0f;
+            StartCoroutine(CoMute(audioSourceItem.Value, isFade, fadeSec));
         }
         foreach (var audioSourceItem in sfxPlayer)
         {
-            audioSourceItem.Value.volume = 0f;
+            StartCoroutine(CoMute(audioSourceItem.Value, isFade, fadeSec));
         }
     }
-    public void UnMute()
+    IEnumerator CoMute(AudioSource audioSource, bool isFade, float fadeSec)
+    {
+        if (audioSource)
+        {
+            if (isFade) yield return CoAudioFadeOut(audioSource, fadeSec);
+            audioSource.volume = 0f;
+        }
+    }
+    public void UnMute(bool isFade = false, float fadeSec = 1f)
     {
         foreach (var audioSourceItem in bgmPlayer)
         {
-            audioSourceItem.Value.volume = masterVolume;
+            StartCoroutine(CoUnMute(audioSourceItem.Value, isFade, fadeSec));
         }
         foreach (var audioSourceItem in sfxPlayer)
         {
-            audioSourceItem.Value.volume = masterVolume;
+            StartCoroutine(CoUnMute(audioSourceItem.Value, isFade, fadeSec));
         }
     }
-
+    IEnumerator CoUnMute(AudioSource audioSource, bool isFade, float fadeSec)
+    {
+        if (audioSource)
+        {
+            if (isFade) yield return CoAudioFadeIn(audioSource, fadeSec);
+            audioSource.volume = MasterVolume;
+        }
+    }
     // Volume을 sec초에 걸쳐 0으로 수렴 
     private IEnumerator CoAudioFadeOut(AudioSource audioSource, float sec)
     {
-        if (audioSource == null) yield break;
-
-        float startVolume = audioSource.volume;
-        float elapsedTime = 0f;
-
-        // 볼륨 0에 수렴
-        while (elapsedTime < sec)
-        {
-            elapsedTime += Time.deltaTime;
-            audioSource.volume = Mathf.Lerp(startVolume, 0f, elapsedTime / sec);
-            yield return null;
-        }
-        audioSource.volume = 0f; 
+        yield return CoChangeVolume(audioSource, sec, audioSource.volume, 0f);
     }
-
     // Volume을 sec초에 걸쳐 masterVolume으로 수렴
     private IEnumerator CoAudioFadeIn(AudioSource audioSource, float sec)
     {
+        yield return CoChangeVolume(audioSource, sec, audioSource.volume, MasterVolume);
+    }
+    IEnumerator CoChangeVolume(AudioSource audioSource, float sec, float startVolume, float endVolume)
+    {
         if (audioSource == null) yield break;
 
-        float startVolume = audioSource.volume; // 현재 볼륨 저장
         float elapsedTime = 0f;
-
         while (elapsedTime < sec)
         {
             elapsedTime += Time.deltaTime;
-            audioSource.volume = Mathf.Lerp(startVolume, masterVolume, elapsedTime / sec);
+            audioSource.volume = Mathf.Lerp(startVolume, endVolume, elapsedTime / sec);
             yield return null;
         }
-
-        audioSource.volume = masterVolume; // 마지막 볼륨 1 보정
+        audioSource.volume = endVolume;
     }
-
 }

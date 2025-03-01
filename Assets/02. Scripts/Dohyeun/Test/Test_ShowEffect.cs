@@ -14,6 +14,12 @@ public class Test_ShowEffect : MonoBehaviour
     IEnumerator CoTest()
     {
         yield return new WaitForSeconds(1f);
+        EffectManager.instance.ShowEffect("TestVFX01", Vector2.zero); // 찰나 실행
+        yield return new WaitForSeconds(1f);
+        EffectManager.instance.ShowEffect("TestVFX01", Vector2.zero, 3f); // 3초 간 실행
+        yield return new WaitForSeconds(4f);
+
+
         EffectManager.instance.ShowEffect("TestParticleEffect01", new Vector2(-7f, 3.5f));
         EffectManager.instance.ShowEffect("TestParticleEffect01", new Vector2(7f, -3.5f));
         yield return new WaitForSeconds(1f);
