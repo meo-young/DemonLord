@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -43,8 +45,12 @@ public class SelectAbilityWarrantUI : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI selectedAbilityText;
     [SerializeField] TextMeshProUGUI selectedWarrantText;
+    [SerializeField] Image selectedAbilityImage;
+    [SerializeField] Image selectedWarrantImage;
     [SerializeField] Button[] AbilityButtons;
     [SerializeField] Button[] WarrantButtons;
+    [SerializeField] Image[] AbilityImages;
+    [SerializeField] Image[] WarrantImages;
     [SerializeField] TextMeshProUGUI[] AbilityNameTexts;
     [SerializeField] TextMeshProUGUI[] WarrantNameTexts;
     [SerializeField] Button ConfirmAbilityButton;
@@ -52,6 +58,9 @@ public class SelectAbilityWarrantUI : MonoBehaviour
 
     private AbilityType selectedAbility;
     private WarrantType selectedWarrant;
+
+    public event Action<AbilityType> OnAbilitySelected;
+    public event Action<WarrantType> OnWarrantSelected;
 
     private void Initialize()
     {
@@ -97,12 +106,26 @@ public class SelectAbilityWarrantUI : MonoBehaviour
     public void OnClickConfirmAbility()
     {
         selectedAbilityText.text = AbilityNameTexts[(int)selectedAbility].text;
+        selectedAbilityImage.sprite = AbilityImages[(int)selectedAbility].sprite;
+        StartCoroutine(LateActive(selectedAbilityImage.gameObject));
         DownAbilityGo.gameObject.SetActive(false);
         DownWarrantGo.gameObject.SetActive(true);
     }
     public void OnClickConfirmWarrant()
     {
         selectedWarrantText.text = WarrantNameTexts[(int)selectedWarrant].text;
+        selectedWarrantImage.sprite = WarrantImages[(int)selectedWarrant].sprite;
+        StartCoroutine(LateActive(selectedWarrantImage.gameObject));
+
+        // 마지막 버튼 누를 때,구독했던 이벤트들
+        OnAbilitySelected?.Invoke(selectedAbility);
+        OnWarrantSelected?.Invoke(selectedWarrant);
+    }
+    IEnumerator LateActive(GameObject go)
+    {
+        go.SetActive(false);
+        yield return null;
+        go.SetActive(true);
     }
 
 }
