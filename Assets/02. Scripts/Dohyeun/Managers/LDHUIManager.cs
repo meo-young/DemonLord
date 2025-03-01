@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -67,7 +68,7 @@ public class LDHUIManager : MonoBehaviour
         }
         else
         {
-            var uiObj = Instantiate(Resources.Load($"DohyeunTest/UI/{uiType}", typeof(GameObject))) as GameObject;
+            var uiObj = Instantiate(Resources.Load($"{Path.Combine(SubUtils.BASE_PATH, SubUtils.UI_PATH)}/{uiType}", typeof(GameObject))) as GameObject;
             ui = uiObj.GetComponent<LDHBaseUI>();
         }
         return ui;

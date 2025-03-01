@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public enum BGM // 네이밍 = 파일명
@@ -60,7 +61,7 @@ public class AudioManager : MonoBehaviour
     }
 
     // Resources 내 데이터 경로
-    private const string AUDIO_PATH = "DohyeunTest/Audio";
+    private string resourcesPath = Path.Combine(SubUtils.BASE_PATH,SubUtils.AUDIO_PATH);
 
     // 게임오브젝트의 Parents
     public Transform BGMTrs;
@@ -80,7 +81,7 @@ public class AudioManager : MonoBehaviour
         for (int i = 0; i < (int)BGM.COUNT; i++)
         {
             var audioName = ((BGM)i).ToString();
-            var pathStr = $"{AUDIO_PATH}/{audioName}";
+            var pathStr = Path.Combine(resourcesPath, audioName);
             var audioClip = Resources.Load(pathStr, typeof(AudioClip)) as AudioClip;
             if (!audioClip)
             {
@@ -103,7 +104,7 @@ public class AudioManager : MonoBehaviour
         for (int i = 0; i < (int)SFX.COUNT; i++)
         {
             var audioName = ((SFX)i).ToString();
-            var pathStr = $"{AUDIO_PATH}/{audioName}";
+            var pathStr = Path.Combine(resourcesPath, audioName);
             var audioClip = Resources.Load(pathStr, typeof(AudioClip)) as AudioClip;
             if (!audioClip)
             {
