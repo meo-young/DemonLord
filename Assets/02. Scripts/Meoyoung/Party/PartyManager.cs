@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+using System.Linq;
 public class PartyManager : MonoBehaviour
 {
     public static PartyManager instance;
@@ -19,6 +19,7 @@ public class PartyManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     // 현재 파티에 캐릭터 추가
     public void AddMember(CharacterBase member)
     {
@@ -26,9 +27,22 @@ public class PartyManager : MonoBehaviour
         PartyInfoUI.instance.AddPartyInfo(member, partyMembers.Count - 1);
     }
 
+    // 파티 멤버 반환
     public List<CharacterBase> GetPartyMembers()
     {
         return partyMembers;
+    }
+
+    // 생존 중인 파티원 중 체력 상태가 가장 나쁜 캐릭터 반환
+    public CharacterBase GetWorstHealthCharacter()
+    {
+        return partyMembers.Where(member => member.isAlive).OrderBy(member => member.currentHealth).First();
+    }
+
+    // 동일한 직업군이 있는지 반환
+    public bool IsSameCharacterTypeInParty(CharacterType characterType)
+    {
+        return partyMembers.Any(member => member.characterType == characterType);
     }
     
 }
