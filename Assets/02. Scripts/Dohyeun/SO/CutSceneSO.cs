@@ -5,12 +5,15 @@ using UnityEngine;
 
 public class CutSceneSO : ScriptableObject
 {
+    // 한 개 Item 당 한 개의 이벤트
     public CutSceneData[] CutsceneDatas;
 }
 [Serializable]
 public class CutSceneData
 {
-    public string Id; // 이벤트 식별 ID
+    public string Id;
+
+    // 한 개 Item 당 BG1, Texts 구성
     public OneCutSceneData[] OneCutscenes;
 }
 [Serializable]
