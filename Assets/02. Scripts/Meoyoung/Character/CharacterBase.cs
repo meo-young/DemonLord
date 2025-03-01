@@ -1,4 +1,7 @@
 using UnityEngine;
+using System.Collections;
+using TMPro;
+using UnityEngine.UI;
 
 /* 각 직업은 다음과 같은 특성을 가진다.
 * 전사 : 마법사에게 추가 데미지
@@ -36,6 +39,9 @@ public class CharacterBase : MonoBehaviour
     {
         // 데미지 적용
         currentHealth -= damage;
+
+        // 체력 UI 최신화
+        InitUI();
         
         // 체력이 0이하일 경우 사망 처리
         if(currentHealth <= 0)
@@ -56,7 +62,7 @@ public class CharacterBase : MonoBehaviour
         GameManager.instance.RollDice();
 
         // 같은 직업이 있다면 추가 데미지 적용
-        ApplySameCharacterTypeDamage(ref damage);
+        //ApplySameCharacterTypeDamage(ref damage);
 
         // 상성 적용
         Applycompatibility(target, ref damage);
@@ -68,6 +74,9 @@ public class CharacterBase : MonoBehaviour
         ApplyDiceResult(ref damage);
 
         Debug.Log($"{characterName}의 공격 ! {target.characterName}에게 {damage}의 데미지 적용");
+
+        // 공격 애니메이션 재생
+        StartCoroutine(SetAttackState());
 
         // 데미지 적용
         target.GetDamage(damage);
@@ -82,12 +91,38 @@ public class CharacterBase : MonoBehaviour
             currentHealth = maxHealth;
         }
     }
-    
+
+    public void InitUI()
+    {
+        // 체력 UI 최신화
+        TMP_Text text = GetComponentInChildren<TMP_Text>();
+        text.text = $"{maxHealth} / {currentHealth}";
+
+        Slider slider = GetComponentInChildren<Slider>();
+        slider.value = ((float)currentHealth / (float)maxHealth);
+    }
+
+    public void OnRebirth()
+    {
+        // 체력 초기화
+        currentHealth = maxHealth;
+
+        // 체력 UI 활성화
+        transform.GetChild(0).gameObject.SetActive(true);
+
+        // 체력 UI 최신화
+        InitUI();
+    }
 
     protected virtual void OnDeath()
     {
         Debug.Log($"{characterName}이(가) 죽었습니다.");
         isAlive = false;
+
+        // @TODO : 캐릭터 묘비로 변경
+
+        // 체력 UI 비활성화
+        transform.GetChild(0).gameObject.SetActive(false);
     }
 
     private void Applycompatibility(CharacterBase target, ref int damage)
@@ -176,6 +211,16 @@ public class CharacterBase : MonoBehaviour
         {
             damage = (int)(damage * 1.5f);
         }
+    }
+
+    private IEnumerator SetAttackState()
+    {
+        Debug.Log("공격 애니메이션 재생");
+        GetComponent<Animator>().SetBool("Attack", true);
+        
+        yield return new WaitForSeconds(0.5f);
+        
+        GetComponent<Animator>().SetBool("Attack", false);
     }
 
     // 캐릭터 데이터로 초기화하는 메서드 추가

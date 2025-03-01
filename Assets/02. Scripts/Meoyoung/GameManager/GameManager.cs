@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     [Header("현재 권능")]
     [SerializeField] private IWarrant currentWarrant;
 
+    public CharacterBase enemy; // 현재 전투 중인 적 캐릭터
+
 
     private void Awake()
     {
@@ -50,13 +52,11 @@ public class GameManager : MonoBehaviour
     {
         if(IsDiceRolled())
         {
-            Debug.LogError("주사위를 이미 굴렸습니다.");
             return;
         }
         else
         {
             currentDiceResult = Dice.instance.Roll();
-            Debug.LogError($"주사위 결과 : {currentDiceResult}");
         }
     }
 

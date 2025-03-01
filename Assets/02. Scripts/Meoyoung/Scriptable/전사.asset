@@ -16,3 +16,4 @@ MonoBehaviour:
   characterType: 0
   maxHealth: 100
   attackPower: 10
+  characterSprite: {fileID: 21300000, guid: c208cf53179f62d40ad95b3cff4b8741, type: 3}

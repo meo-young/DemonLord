@@ -16,4 +16,12 @@ public class Player : CharacterBase
         // Test
         //SelectionUI.instance.InitSelectionUI();
     }
+
+    protected override void OnDeath()
+    {
+        base.OnDeath();
+
+        Debug.Log("게임 종료 해라");
+        
+    }
 }
