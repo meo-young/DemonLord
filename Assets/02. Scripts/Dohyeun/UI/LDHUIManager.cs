@@ -2,8 +2,44 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class LDHUIManager : LDHSingletonBehavior<LDHUIManager>
+public class LDHUIManager : MonoBehaviour
 {
+
+    public static LDHUIManager instance;
+
+    #region 싱글톤 공통
+    private bool isDestroyOnLoad = false;
+    private bool isInitialized = false;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            if (!isDestroyOnLoad)
+            {
+                if (transform.parent)
+                    DontDestroyOnLoad(transform.parent);
+                else
+                    DontDestroyOnLoad(this);
+            }
+        }
+        else
+        {
+            if (instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
+        if (!isInitialized)
+            instance.Initialize();
+        isInitialized = true;
+    }
+    #endregion
+    private void Initialize()
+    {
+    }
+
     public Transform UICanvasTrs;
     public Transform ClosedUITrs;
 
@@ -14,9 +50,6 @@ public class LDHUIManager : LDHSingletonBehavior<LDHUIManager>
 
     [SerializeField] private CutSceneSO cutSceneSO;
 
-    protected override void InitChild()
-    {
-    }
     private LDHBaseUI GetUI<T>(out bool isAlreadyOpen)
     {
         System.Type uiType = typeof(T);
