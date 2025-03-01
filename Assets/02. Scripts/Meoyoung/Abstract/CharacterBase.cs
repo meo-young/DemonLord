@@ -15,12 +15,12 @@ public enum CharacterType
 
 public class CharacterBase : MonoBehaviour
 {
-    [SerializeField] protected string characterName;         // 캐릭터 이름 
-    [SerializeField] protected int maxHealth;                // 최대 체력
-    [SerializeField] protected int attackPower;              // 공격력
-    [SerializeField] protected CharacterType characterType;  // 캐릭터 직업
-
-    private int currentHealth;  // 현재 체력
+    public string characterName;         // 캐릭터 이름 
+    public int maxHealth;                // 최대 체력
+    public int attackPower;              // 공격력
+    public CharacterType characterType;  // 캐릭터 직업
+    public bool isAlive;                 // 생존 여부
+    public int currentHealth;  // 현재 체력
     private Dice dice;          // 주사위 클래스
 
     private void Awake() 
@@ -33,7 +33,8 @@ public class CharacterBase : MonoBehaviour
         // 체력 초기화
         currentHealth = maxHealth;
 
-        Attack(this);
+        // 생존 여부 초기화
+        isAlive = true;
     }
 
     public virtual void Attack(CharacterBase target)
@@ -73,6 +74,7 @@ public class CharacterBase : MonoBehaviour
     protected virtual void OnDeath()
     {
         Debug.Log($"{characterName}이(가) 죽었습니다.");
+        isAlive = false;
     }
 
     private void Applycompatibility(CharacterBase target, ref int damage)
