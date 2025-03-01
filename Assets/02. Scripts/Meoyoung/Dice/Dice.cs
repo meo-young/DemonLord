@@ -8,11 +8,26 @@ public enum DiceType
 {
     Bad,
     Normal,
-    Good
+    Good,
+    None
 }
 
 public class Dice : MonoBehaviour
 {
+    public static Dice instance;
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     public DiceType Roll()
     {
         // 랜덤으로 주사위를 굴림
