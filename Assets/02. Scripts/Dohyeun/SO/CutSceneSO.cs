@@ -22,6 +22,7 @@ public class OneCutSceneData
     public Sprite Background;
     public Vector2 TextPosition;
     public string[] Texts;
+
 }
 
 // 나중에 아래 아이디어 참고해서 개선
