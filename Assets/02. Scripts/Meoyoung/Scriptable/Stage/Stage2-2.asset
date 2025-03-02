@@ -20,3 +20,4 @@ MonoBehaviour:
   npcProbability: 10
   isRecruit: 0
   isItemRecruit: 0
+  isBoss: 0

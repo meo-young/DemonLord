@@ -16,6 +16,7 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private BattleFormation battleFormation;
+    [SerializeField] private GameObject bossEnemy;
 
     private bool isBattle = false;
 
@@ -40,6 +41,7 @@ public class BattleManager : MonoBehaviour
         FadeManager.instance.FadeOut(
             () =>
             {
+                SelectionUI.instance.HideSelectionUI();
                 BattleManager.instance.StartBattle();
             }
         );
@@ -212,22 +214,24 @@ public class BattleManager : MonoBehaviour
 
     private void CheckStageEvent(StageData currentStage)
     {
-        // 랜덤 확률 계산
-        int randomValue = UnityEngine.Random.Range(0, 100);
-        int probabilitySum = 0;
-
-
+        // 모집 여부 체크
         if(currentStage.isRecruit)
         {
             PartyRecruitUI.instance.ShowRecruitPanel();
             return;
         }
 
+        // 아이템 모집 여부 체크
         if(currentStage.isItemRecruit)
         {
             ThiefItem.instance.ShowThiefItem();
             return;
         }
+
+
+        // 랜덤 확률 계산
+        int randomValue = UnityEngine.Random.Range(0, 100);
+        int probabilitySum = 0;
         
         // 근접 몬스터 확률 체크
         if (randomValue < (probabilitySum += currentStage.meleeMonsterProbability))
@@ -257,7 +261,7 @@ public class BattleManager : MonoBehaviour
         // NPC 확률 체크
         else if (randomValue < (probabilitySum += currentStage.npcProbability))
         {
-            if(PartyManager.instance.GetPartyMemberNum() >= 4)
+            if(PartyManager.instance.GetPartyMemberNum() >= 3)
             {
                 // 다음 스테이지 데이터 처리
                 ProcessNextStageData();
@@ -269,6 +273,17 @@ public class BattleManager : MonoBehaviour
                 NPCSelectionUI.instance.ShowNPCSelectionUI();
             }
             return;
+        }
+
+
+        // 보스 등장 여부 체크
+        if(currentStage.isBoss)
+        {
+            bossEnemy.SetActive(true);
+            enemySpawner.DestroySelf();
+            GameManager.instance.enemy = bossEnemy.GetComponent<BossEnemy>();
+            GameManager.instance.enemy.InitUI();
+            SituationUI.instance.SetSituationText("마왕을 만났습니다.");
         }
 
         // 배틀 여부 활성화

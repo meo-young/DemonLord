@@ -52,6 +52,8 @@ public class PartyRecruitUI : MonoBehaviour
 
         // 클릭된 캐릭터 이미지 활성화
         characterImages[index].transform.localScale = Vector3.one;
+
+        Dice.instance.AddDiceResultEvent(OnClickRecruitBtn);
     }
 
 
@@ -273,18 +275,24 @@ public class PartyRecruitUI : MonoBehaviour
         int diceValue = GameManager.instance.currentDiceResultInt;
         int partySize = PartyManager.instance.GetPartyMemberNum();
 
+        int peerHandicap = GameManager.instance.peerHandicap;
+
         bool isSuccess = false;
+
+        Debug.Log("Party Size : " + partySize);
+        Debug.Log("Dice Value : " + diceValue);
+        Debug.Log("Peer Handicap : " + peerHandicap);
 
         switch (partySize)
         {
             case 1:
-                isSuccess = true;
+                isSuccess = diceValue >= 7 - peerHandicap;
                 break;
             case 2:
-                isSuccess = diceValue > 5;
+                isSuccess = diceValue >= 9 - peerHandicap;
                 break;
             case 3:
-                isSuccess = diceValue > 9;
+                isSuccess = diceValue >= 10 - peerHandicap;
                 break;
         }
 
