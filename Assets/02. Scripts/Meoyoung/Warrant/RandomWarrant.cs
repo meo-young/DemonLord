@@ -58,5 +58,8 @@ public class RandomWarrant : MonoBehaviour, IWarrant
                 member.GetDamage(RANDOM_WARRANT_DAMAGE_AMOUNT);
             }
         }
+
+        GameManager.instance.isWarrantActive = false;
+        GameManager.instance.SetWarrantButtonDeactive();
     }   
 }
