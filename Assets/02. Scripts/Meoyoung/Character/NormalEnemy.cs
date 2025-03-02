@@ -63,8 +63,6 @@ public class NormalEnemy : Enemy
 
     public override void GetDamage(int damage)
     {
-        base.GetDamage(damage);
-
         // 데미지 적용
         currentHealth -= damage;
 

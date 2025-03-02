@@ -37,28 +37,28 @@ public class CharacterBase : MonoBehaviour
 
 
     /// <summary>
-    /// 현재 캐릭터에게 damage 만큼 현재 체력을 감소소
+    /// 현재 캐릭터에게 damage 만큼 현재 체력을 감소
     /// </summary>
     /// <param name="damage">적용할 데미지</param>
     public virtual void GetDamage(int damage)
     {
         // 데미지 적용
         currentHealth -= damage;
-
-        // 체력 UI 최신화
-        InitUI();
         
         // 체력이 0이하일 경우 사망 처리
         if(currentHealth <= 0)
         {
             OnDeath();
         }
+
+        // 체력 UI 최신화
+        InitUI();
     }
 
 
 
     /// <summary>
-    /// 최대 체력을 초과하지 않는 범위에서 현재 체력을 amount 만큼 회복복
+    /// 최대 체력을 초과하지 않는 범위에서 현재 체력을 amount 만큼 회복
     /// </summary>
     /// <param name="amount">회복할 체력</param>
     public virtual void Heal(int amount)
@@ -84,8 +84,11 @@ public class CharacterBase : MonoBehaviour
         // 체력 초기화
         currentHealth = maxHealth;
 
+        // 생존 여부 초기화
+        isAlive = true;
+
         // 체력 UI 활성화
-        transform.GetChild(0).gameObject.SetActive(true);
+        transform.GetChild(0).transform.localScale = Vector3.one;
 
         // 체력 UI 최신화
         InitUI();
@@ -115,6 +118,9 @@ public class CharacterBase : MonoBehaviour
     {
         Debug.Log($"{characterName}이(가) 죽었습니다.");
         isAlive = false;
+
+        // 체력 UI 비활성화
+        transform.GetChild(0).transform.localScale = Vector3.zero;  
 
         // 캐릭터 이미지 묘비로 변경
         GetComponent<SpriteRenderer>().sprite = GameManager.instance.tombstoneSprite;
@@ -185,7 +191,7 @@ public class CharacterBase : MonoBehaviour
         {
             case DiceType.Bad:
                 Debug.Log("주사위 망함");
-                damage = (int)(damage * 0.5f);
+                damage = (int)(damage * 0.8f);
                 break;
             case DiceType.Normal:
                 Debug.Log("주사위 보통");
@@ -223,7 +229,7 @@ public class CharacterBase : MonoBehaviour
         // 도적이 파티에 존재할 경우 추가 데미지
         if(GameManager.instance.isThiefItem)
         {
-            damage = (int)(damage * 1.5f);
+            damage += 13;
         }
     }
 

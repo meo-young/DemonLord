@@ -28,4 +28,7 @@ public class StageData : ScriptableObject
     [Header("아이템 모집 여부")]
     public bool isItemRecruit;
 
+    [Header("보스 등장 여부")]
+    public bool isBoss;
+
 }

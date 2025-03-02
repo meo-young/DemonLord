@@ -23,7 +23,7 @@ public class TrapUI : MonoBehaviour
         transform.localScale = Vector3.one;
         
         // 상황 텍스트 수정
-        SituationUI.instance.SetSituationText("도적의 가호는 데미지 증가와 함정에 유리해집니다.");
+        SituationUI.instance.SetSituationText("파티가 함정에 빠지게 되었습니다.");
     }
 
 
