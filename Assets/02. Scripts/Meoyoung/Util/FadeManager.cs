@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
 
@@ -18,6 +19,9 @@ public class FadeManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            
+            // 씬 전환 이벤트 등록
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -32,17 +36,60 @@ public class FadeManager : MonoBehaviour
         defaultImage = GetComponentInChildren<Image>();
         defaultImage.transform.localScale = Vector3.zero;
     }
-    
+
+
+
+    /// <summary>
+    /// Destory가 호출되는 경우 씬 전환 이벤트 해제
+    /// </summary>
+    private void OnDestroy()
+    {
+        // 이벤트 해제
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+
+
+    /// <summary>
+    /// 씬 전환 이벤트 연결
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="mode"></param>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FadeIn();
+    }
+
+
+
+
+    /// <summary>
+    /// 페이드 아웃
+    /// </summary>
+    /// <param name="onComplete">페이드 아웃 완료 후 실행할 함수</param>
     public void FadeOut(Action onComplete = null)
     {
         StartCoroutine(FadeOutCoroutine(onComplete));
     }
 
+
+
+
+    /// <summary>
+    /// 페이드 인
+    /// </summary>
+    /// <param name="onComplete">페이드 인 완료 후 실행할 함수</param>
     public void FadeIn(Action onComplete = null)
     {
         StartCoroutine(FadeInCoroutine(onComplete));
     }
 
+
+
+    /// <summary>
+    /// 페이드 인 코루틴
+    /// </summary>
+    /// <param name="onComplete">페이드 인 완료 후 실행할 함수</param>
     private IEnumerator FadeInCoroutine(Action onComplete)
     {
         defaultImage.transform.localScale = Vector3.one;
@@ -72,6 +119,12 @@ public class FadeManager : MonoBehaviour
         onComplete?.Invoke();
     }
 
+
+
+    /// <summary>
+    /// 페이드 아웃 코루틴
+    /// </summary>
+    /// <param name="onComplete">페이드 아웃 완료 후 실행할 함수</param>
     private IEnumerator FadeOutCoroutine(Action onComplete)
     {
         defaultImage.transform.localScale = Vector3.one;
@@ -99,12 +152,17 @@ public class FadeManager : MonoBehaviour
         onComplete?.Invoke();
     }
 
+
+
+    /// <summary>
+    /// 이미지의 투명도 설정
+    /// </summary>
+    /// <param name="image">설정할 이미지</param>
+    /// <param name="alpha">설정할 투명도</param>
     private void SetAlpha(Image image, float alpha)
     {
         Color color = image.color;
         color.a = alpha;
         image.color = color;
     }
-
-    
 }
