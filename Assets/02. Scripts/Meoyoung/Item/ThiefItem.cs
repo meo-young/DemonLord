@@ -1,8 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ThiefItem : MonoBehaviour
 {
     public static ThiefItem instance;
+
+    public Button thiefItemBtn;
 
     private void Awake()
     {
@@ -66,6 +69,8 @@ public class ThiefItem : MonoBehaviour
         {
             SituationUI.instance.SetSituationText("도적의 가호를 받지 못했습니다...");
         }
+
+        thiefItemBtn.interactable = false;
         
 
         Invoke("TempFadeOut", 1.5f);
