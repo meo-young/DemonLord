@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3737943d2a9ee5e4e887b23ffdd05271, type: 3}
   m_Name: Stage2-4
   m_EditorClassIdentifier: 
-  stageNumber: 2-4
+  stageNumber: "\uC2A4\uD14C\uC774\uC9C0 2-4"
   meleeMonsterProbability: 5
   rangedMonsterProbability: 5
   magicMonsterProbability: 5
   trapProbability: 5
   npcProbability: 80
-  isRecruit: 1
+  isRecruit: 0
   isItemRecruit: 0
