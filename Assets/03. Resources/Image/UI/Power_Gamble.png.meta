@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 6a150bb1de2433747b6254c629790158
+guid: d7641df41f643dc4bb79df145047e0c0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6205739157835936278
-    second: Title_BackGround_0
+      213: -637199509730744960
+    second: Power_Gamble_0
+  - first:
+      213: 5613046202725572911
+    second: Power_Gamble_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +49,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -100,13 +103,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Title_BackGround_0
+      name: Power_Gamble_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 1920
-        height: 1080
+        y: 23
+        width: 488
+        height: 466
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +118,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aed05788d19c0e9a0800000000000000
-      internalID: -6205739157835936278
+      spriteID: 08522730c663827f0800000000000000
+      internalID: -637199509730744960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Power_Gamble_1
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 182
+        width: 59
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f21205d38cb85ed40800000000000000
+      internalID: 5613046202725572911
       vertices: []
       indices: 
       edges: []
@@ -125,7 +150,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +160,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Title_BackGround_0: -6205739157835936278
+      Power_Gamble_0: -637199509730744960
+      Power_Gamble_1: 5613046202725572911
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

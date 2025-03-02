@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 6a150bb1de2433747b6254c629790158
+guid: 55515c9026628874aa2c13f3e8f3e666
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6205739157835936278
-    second: Title_BackGround_0
+      213: 8048645161817450042
+    second: Stat_Friendship_0
+  - first:
+      213: -8212999225227341863
+    second: Stat_Friendship_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +40,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,7 +49,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -100,13 +103,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Title_BackGround_0
+      name: Stat_Friendship_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1920
-        height: 1080
+        x: 10
+        y: 20
+        width: 479
+        height: 409
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +118,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aed05788d19c0e9a0800000000000000
-      internalID: -6205739157835936278
+      spriteID: a36ab41912882bf60800000000000000
+      internalID: 8048645161817450042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Stat_Friendship_1
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 18
+        width: 278
+        height: 210
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9df04cf08b0950e80800000000000000
+      internalID: -8212999225227341863
       vertices: []
       indices: 
       edges: []
@@ -125,7 +150,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +160,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Title_BackGround_0: -6205739157835936278
+      Stat_Friendship_0: 8048645161817450042
+      Stat_Friendship_1: -8212999225227341863
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

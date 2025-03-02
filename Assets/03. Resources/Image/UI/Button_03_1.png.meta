@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 6a150bb1de2433747b6254c629790158
+guid: be5cd86faf3cdf64d8500c359eebc9b0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6205739157835936278
-    second: Title_BackGround_0
+      213: -5486757357884808915
+    second: Button_03_1_0
+  - first:
+      213: 8751908778178845691
+    second: Button_03_1_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +103,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Title_BackGround_0
+      name: Button_03_1_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1920
-        height: 1080
+        x: 15
+        y: 445
+        width: 994
+        height: 143
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: aed05788d19c0e9a0800000000000000
-      internalID: -6205739157835936278
+      spriteID: f802953b7da2fd948b1dfe3ede0eccab
+      internalID: 179839585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_03_1_1
+      rect:
+        serializedVersion: 2
+        x: 953
+        y: 436
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d61ef9d1c08029743a574f0276eaecc6
+      internalID: 2102854045
       vertices: []
       indices: 
       edges: []
@@ -125,7 +150,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 7c170e0b99e8e244f8f446631e8d1896
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +160,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Title_BackGround_0: -6205739157835936278
+      Button_03_1_0: 179839585
+      Button_03_1_1: 2102854045
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
