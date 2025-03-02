@@ -11,6 +11,14 @@ public enum BGM // 네이밍 = 파일명
     bgm_opening,
     bgm_test_get_ready,
     bgm_test_moonside_howl,
+    bgm_NormalField,
+    bgm_Boss,
+    bgm_FirstCutScene,
+    bgm_NPC,
+    bgm_Trap,
+    bgm_Recruit,
+    bgm_Title,
+    bgm_item,
     COUNT,
 }
 public enum SFX // 네이밍 = 파일명
@@ -27,6 +35,17 @@ public enum SFX // 네이밍 = 파일명
     sfx_dodge,
     sfx_test_coin,
     sfx_test_click,
+    sfx_UI_Click,
+    sfx_Heal,
+    sfx_NPC_Fail,
+    sfx_Recruit_Success,
+    sfx_Recruit_Fail,
+    sfx_Dice,
+    sfx_Trapped,
+    sfx_NoTrapped,
+    sfx_typing,
+    sfx_UI_Typing,
+    sfx_dead,
     COUNT,
 }
 public class AudioManager : MonoBehaviour

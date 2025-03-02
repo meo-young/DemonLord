@@ -6,6 +6,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    [Header("뒷배경 리소스")]
+    public Sprite battleBackground;
+    public Sprite bossBackground;
+    public Image backgroundImage;
+
     [Header("현재 주사위 결과")]
     [SerializeField] private DiceType currentDiceResult;
     public int currentDiceResultInt;
@@ -25,7 +30,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text abilityText;
     public int trapHandicap = 0;
     public int peerHandicap = 0;
-    public int damageHandicap = 0;
+    public bool isDamageHandicap = false;
 
     [Header("HP UI 프리팹")]
     public GameObject hpUIPrefab;
@@ -191,6 +196,8 @@ public class GameManager : MonoBehaviour
         }
 
         abilityText.text = AbilityManager.instance.GetAbilityDescription(abilityType);
+
+        currentAbility.UseAbility();
     }
 #endregion
 
@@ -207,5 +214,13 @@ public class GameManager : MonoBehaviour
 
 #region 보스 이벤트 
     //@TODO : 보스 이벤트 처리
+#endregion
+
+#region 뒷배경 리소스
+    // 뒷배경 리소스 설정
+    public void SetBackground(Sprite background)
+    {
+        backgroundImage.sprite = background;
+    }
 #endregion
 }

@@ -43,7 +43,7 @@ MonoBehaviour:
       - "\uC2E0\uAE30\uD55C \uC5F0\uCD9C\uC774\uB2E4."
   - Id: Opening
     OneCutscenes:
-    - Background: {fileID: 8456160606961268066, guid: b8b9b8ab2618c924692042e24d68853b, type: 3}
+    - Background: {fileID: 21300000, guid: f37245744548f634a8c047486412f809, type: 3}
       TextPosition: {x: 200, y: -200}
       Texts:
       - "\uC5B4\uB460\uC774 \uB300\uC9C0\uB97C \uB4A4\uB36E\uACE0, \uB9C8\uC655\uC758

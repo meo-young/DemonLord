@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LDHUIManager : MonoBehaviour
 {
@@ -40,6 +41,8 @@ public class LDHUIManager : MonoBehaviour
     private void Initialize()
     {
     }
+
+    public string sceneName;
 
     public Transform UICanvasTrs;
     public Transform ClosedUITrs;
@@ -102,6 +105,8 @@ public class LDHUIManager : MonoBehaviour
     }
     public void CloseUI(LDHBaseUI ui)
     {
+        SceneManager.LoadScene(sceneName);
+        
         System.Type uiType = ui.GetType();
         ui.gameObject.SetActive(false);
         m_OpenUIPool.Remove(uiType);

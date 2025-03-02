@@ -60,6 +60,36 @@ public class PartyManager : MonoBehaviour
 
 
     /// <summary>
+    /// 생존해 있는 파티원들의 체력을 amount 만큼 회복
+    /// </summary>
+    /// <param name="amount">회복할 체력</param>
+    public void HealAlivePartyMembers(int amount)
+    {
+        AudioManager.instance.PlaySFX(SFX.sfx_Heal);
+        foreach (CharacterBase member in GetAlivePartyMembers())
+        {
+            member.Heal(amount);
+        }
+    }
+
+
+
+
+    /// <summary>
+    /// 생존해 있는 파티원들이 amount 만큼 데미지를 받음
+    /// </summary>
+    /// <param name="amount">데미지</param>
+    public void GetDamageAlivePartyMembers(int amount)
+    {
+        foreach (CharacterBase member in GetAlivePartyMembers())
+        {
+            member.GetDamage(amount);
+        }
+    }
+
+
+
+    /// <summary>
     /// 파티 멤버 수 반환
     /// </summary>
     /// <returns>파티 멤버 수 반환</returns>

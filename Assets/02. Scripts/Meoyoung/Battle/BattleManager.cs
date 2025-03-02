@@ -18,7 +18,10 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private BattleFormation battleFormation;
     [SerializeField] private GameObject bossEnemy;
 
+    public SpriteRenderer monsterSpriteRenderer;
+
     private bool isBattle = false;
+    private bool isBoss = false;
 
     private void Awake()
     {
@@ -42,6 +45,7 @@ public class BattleManager : MonoBehaviour
             () =>
             {
                 SelectionUI.instance.HideSelectionUI();
+                monsterSpriteRenderer.sprite = null;
                 BattleManager.instance.StartBattle();
             }
         );
@@ -53,6 +57,9 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public void StartBattle()
     {
+        // 뒷배경 리소스 설정
+        GameManager.instance.SetBackground(GameManager.instance.battleBackground);
+
         // 주사위 결과 텍스트 초기화
         Dice.instance.InitDiceBtn();
 
@@ -84,24 +91,34 @@ public class BattleManager : MonoBehaviour
         // 배틀 중이 아니면 return
         if(isBattle == false) return;
 
-
-        // 권능 적용 해제
-        if(GameManager.instance.isWarrantActive)
+        if(isBoss)
         {
-            GameManager.instance.isWarrantActive = false;
+            isBoss = false;
+
+            // 적 공격 이벤트 추가
+            AddEventToQueue(
+                () => GameManager.instance.enemy.AttackPlayer()
+            );
+
+            // 이벤트 큐 처리
+            StartEventProcess();
+            
+            return;
         }
-        // 사용한 적이 없다면 권능 버튼 활성화
         else
+        {
+            // 선택지 UI 활성화
+            SelectionUI.instance.InitSelectionUI();
+            SelectionUI.instance.SetActiveSelectionUI();
+        }
+
+        if(!GameManager.instance.isWarrantUsed)
         {
             GameManager.instance.SetWarrantButtonActive();
         }
 
         // 주사위 결과 텍스트 초기화
         Dice.instance.InitDiceBtn();
-
-        // 선택지 UI 활성화
-        SelectionUI.instance.InitSelectionUI();
-        SelectionUI.instance.SetActiveSelectionUI();
     }
 
 
@@ -237,24 +254,28 @@ public class BattleManager : MonoBehaviour
         if (randomValue < (probabilitySum += currentStage.meleeMonsterProbability))
         {
             Debug.Log($"근접 몬스터 등장! (확률: {currentStage.meleeMonsterProbability}%)");
+            AudioManager.instance.PlayBGM(BGM.bgm_NormalField);
             enemySpawner.SpawnEnemy(CharacterType.Warrior);
         }
         // 원거리 몬스터 확률 체크
         else if (randomValue < (probabilitySum += currentStage.rangedMonsterProbability))
         {
             Debug.Log($"원거리 몬스터 등장! (확률: {currentStage.rangedMonsterProbability}%)");
+            AudioManager.instance.PlayBGM(BGM.bgm_NormalField);
             enemySpawner.SpawnEnemy(CharacterType.Ranger);
         }
         // 마법 몬스터 확률 체크
         else if (randomValue < (probabilitySum += currentStage.magicMonsterProbability))
         {
             Debug.Log($"마법 몬스터 등장! (확률: {currentStage.magicMonsterProbability}%)");
+            AudioManager.instance.PlayBGM(BGM.bgm_NormalField);
             enemySpawner.SpawnEnemy(CharacterType.Wizard);
         }
         // 함정 확률 체크
         else if (randomValue < (probabilitySum += currentStage.trapProbability))
         {
             Debug.Log($"함정 발견! (확률: {currentStage.trapProbability}%)");
+            AudioManager.instance.PlayBGM(BGM.bgm_Trap);
             TrapUI.instance.ShowTrapUI();
             return;
         }
@@ -270,6 +291,7 @@ public class BattleManager : MonoBehaviour
             else
             {
                 Debug.Log($"NPC 조우! (확률: {currentStage.npcProbability}%)");
+                AudioManager.instance.PlayBGM(BGM.bgm_item);
                 NPCSelectionUI.instance.ShowNPCSelectionUI();
             }
             return;
@@ -279,12 +301,17 @@ public class BattleManager : MonoBehaviour
         // 보스 등장 여부 체크
         if(currentStage.isBoss)
         {
+            isBoss = true;
+            
             bossEnemy.SetActive(true);
             enemySpawner.DestroySelf();
             GameManager.instance.enemy = bossEnemy.GetComponent<BossEnemy>();
             GameManager.instance.enemy.InitUI();
             SituationUI.instance.SetSituationText("마왕을 만났습니다.");
+            GameManager.instance.SetBackground(GameManager.instance.bossBackground);
+            AudioManager.instance.PlayBGM(BGM.bgm_Boss);
         }
+
 
         // 배틀 여부 활성화
         isBattle = true;

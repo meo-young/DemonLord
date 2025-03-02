@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class BossEnemy : Enemy
 {
@@ -46,6 +47,13 @@ public class BossEnemy : Enemy
 
         // 전투 승리
         BattleManager.instance.BattleWin();
+
+        Invoke("NextScene", 5f);
+    }
+
+    private void NextScene()
+    {
+        SceneManager.LoadScene("Ending");
     }
 
     public override void GetDamage(int damage)

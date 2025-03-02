@@ -13,6 +13,7 @@ public enum DiceType
     Bad,
     Normal,
     Good,
+    Perfect,
     None
 }
 
@@ -29,6 +30,9 @@ public class Dice : MonoBehaviour
 
     [Header("주사위 굴리는 애니메이션")]
     public Animator diceAnimator;
+
+    public Sprite enabledDiceButtonSprite;
+    public Sprite disabledDiceButtonSprite;
 
     private int diceResult;
     private Action diceResultEvent;
@@ -57,21 +61,24 @@ public class Dice : MonoBehaviour
         diceResult = UnityEngine.Random.Range(2, 13);
         GameManager.instance.currentDiceResultInt = diceResult;
 
-        // 특성에 따라 주사위 결과에 영향을 주는 핸디캡 적용
-        int handicap = GameManager.instance.damageHandicap;
+
 
         // 결과에 따라 주사위 타입을 반환
-        if(diceResult <= 4 - handicap)
+        if(diceResult <= 4)
         {
             return DiceType.Bad;
         }
-        else if(diceResult <= 10 - handicap)
+        else if(diceResult <= 10)
         {
             return DiceType.Normal;
         }
-        else
+        else if(diceResult <= 12)
         {
             return DiceType.Good;
+        }
+        else
+        {
+            return DiceType.Perfect;
         }
     }
 
@@ -89,7 +96,8 @@ public class Dice : MonoBehaviour
         }
 
         // 주사위 버튼 활성화
-        diceButton.interactable = true;
+        diceButton.enabled = true;
+        diceButton.image.sprite = enabledDiceButtonSprite;
 
         this.diceResultEvent += diceResultEvent;
     }
@@ -104,7 +112,8 @@ public class Dice : MonoBehaviour
         diceResultText.rectTransform.localScale = Vector3.zero;
         diceResultText.text = "";
 
-        diceButton.interactable = false;
+        diceButton.enabled = false;
+        diceButton.image.sprite = disabledDiceButtonSprite;
     }
 
 
@@ -139,7 +148,12 @@ public class Dice : MonoBehaviour
         // 주사위 굴리는 애니메이션 실행
         diceAnimator.SetBool("Roll", true);
 
+        // 동료 모집 버튼 비활성화
+        PartyRecruitUI.instance.SelectionBtnDeactivate();
+
         yield return new WaitForSeconds(1.5f);
+
+        AudioManager.instance.PlaySFX(SFX.sfx_Dice);
 
         // 주사위 결과 텍스트 표시
         SetDiceResultText(diceResult);

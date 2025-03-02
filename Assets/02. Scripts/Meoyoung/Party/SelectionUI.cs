@@ -51,8 +51,7 @@ public class SelectionUI : MonoBehaviour
             Image image = GetImageByCharacterType(member.characterType);
             if(image != null)
             {
-                Color color = Color.red;
-                color.a = 0.1f;
+                Color color = Color.white;
                 image.color = color;
             }
 
@@ -94,7 +93,7 @@ public class SelectionUI : MonoBehaviour
 
 
     /// <summary>
-    /// 선택지 UI 모두 비활성화
+    /// 선택지 UI 버튼 기능을 비활성화
     /// </summary>
     public void DeactivateSelectionUI()
     {

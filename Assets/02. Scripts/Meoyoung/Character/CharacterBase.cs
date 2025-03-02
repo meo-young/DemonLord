@@ -13,7 +13,7 @@ public enum CharacterType
     Warrior,    // 전사
     Ranger,     // 궁수
     Wizard,     // 마법사
-    Assassin    // 도적
+    Boss        // 보스
 }
 
 public class CharacterBase : MonoBehaviour
@@ -90,6 +90,9 @@ public class CharacterBase : MonoBehaviour
         // 체력 UI 활성화
         transform.GetChild(0).transform.localScale = Vector3.one;
 
+        // 파티 정보 UI 최신화
+        PartyInfoUI.instance.RefreshPartyInfo();
+
         // 체력 UI 최신화
         InitUI();
     }
@@ -119,6 +122,9 @@ public class CharacterBase : MonoBehaviour
         Debug.Log($"{characterName}이(가) 죽었습니다.");
         isAlive = false;
 
+        // 파티 정보 UI 최신화
+        PartyInfoUI.instance.RefreshPartyInfo();
+
         // 체력 UI 비활성화
         transform.GetChild(0).transform.localScale = Vector3.zero;  
 
@@ -139,6 +145,7 @@ public class CharacterBase : MonoBehaviour
         switch(characterType)
         {
             case CharacterType.Warrior:
+                AudioManager.instance.PlaySFX(SFX.sfx_attack_melee);
                 if(target.characterType == CharacterType.Wizard)
                 {
                     Debug.Log($"{characterType} > {target.characterType} 상성 적용");
@@ -149,8 +156,14 @@ public class CharacterBase : MonoBehaviour
                     Debug.Log($"{characterType} < {target.characterType} 상성 적용");
                     damage = (int)(damage * 0.5f);
                 }
+                else if(target.characterType == CharacterType.Boss)
+                {
+                    Debug.Log($"{characterType} > {target.characterType} 상성 적용");
+                    damage = (int)(damage * 1.1f);
+                }
                 break;
             case CharacterType.Ranger:
+                AudioManager.instance.PlaySFX(SFX.sfx_attack_range);
                 if(target.characterType == CharacterType.Warrior)
                 {
                     Debug.Log($"{characterType} > {target.characterType} 상성 적용");
@@ -161,8 +174,14 @@ public class CharacterBase : MonoBehaviour
                     Debug.Log($"{characterType} < {target.characterType} 상성 적용");
                     damage = (int)(damage * 0.5f);
                 }
+                else if(target.characterType == CharacterType.Boss)
+                {
+                    Debug.Log($"{characterType} > {target.characterType} 상성 적용");
+                    damage = (int)(damage * 0.9f);
+                }
                 break;
             case CharacterType.Wizard:
+                AudioManager.instance.PlaySFX(SFX.sfx_attack_magic);
                 if(target.characterType == CharacterType.Ranger)
                 {
                     Debug.Log($"{characterType} > {target.characterType} 상성 적용");
@@ -173,9 +192,11 @@ public class CharacterBase : MonoBehaviour
                     Debug.Log($"{characterType} < {target.characterType} 상성 적용");
                     damage = (int)(damage * 0.5f);
                 }
-                break;
-            case CharacterType.Assassin:
-                // @TODO : 도적의 특수 능력 추가
+                else if(target.characterType == CharacterType.Boss)
+                {
+                    Debug.Log($"{characterType} > {target.characterType} 상성 적용");
+                    damage = (int)(damage * 0.9f);
+                }
                 break;
         }
     }
@@ -186,22 +207,70 @@ public class CharacterBase : MonoBehaviour
     /// <param name="damage">데미지</param>
     protected void ApplyDiceResult(ref int damage)
     {
-        // 주사위 타입에 따라 데미지 변화
-        switch(GameManager.instance.GetCurrentDiceResult())
+  
+        // 주사위 눈에 따라 데미지 변화
+        int diceResult = GameManager.instance.currentDiceResultInt;
+
+        if(GameManager.instance.isDamageHandicap && !(this is Enemy))
         {
-            case DiceType.Bad:
-                Debug.Log("주사위 망함");
-                damage = (int)(damage * 0.8f);
-                break;
-            case DiceType.Normal:
-                Debug.Log("주사위 보통");
+            if(diceResult <= 4) 
+            {
+                Debug.Log("70%");
+                damage = (int)(damage * 0.7f);
+            }
+            else if(diceResult <= 7) 
+            {
+                Debug.Log("100%");
                 damage = (int)(damage * 1.0f);
-                break;
-            case DiceType.Good:
-                Debug.Log("주사위 좋음");
-                damage = (int)(damage * 1.5f);
-                break;
+            }
+            else if(diceResult <= 10)
+            {
+                Debug.Log("120%");
+                damage = (int)(damage * 1.2f);
+            }
+            else if(diceResult <= 11) 
+            {
+                Debug.Log("200%"); 
+                damage = (int)(damage * 2.0f);
+            }
+            else if(diceResult <= 12) 
+            {
+                Debug.Log("1000%");
+                damage = (int)(damage * 500.0f);
+                AudioManager.instance.PlaySFX(SFX.sfx_critical);
+            }
         }
+        else
+        {
+            if(diceResult <= 2) 
+            {
+                Debug.Log("빗나감");
+                damage = 0;
+                AudioManager.instance.PlaySFX(SFX.sfx_dodge);
+            }
+            else if(diceResult <= 5) 
+            {
+                Debug.Log("70%");
+                damage = (int)(damage * 0.7f);
+            }
+            else if(diceResult <= 8) 
+            {
+                Debug.Log("100%");
+                damage = (int)(damage * 1.0f);
+            }
+            else if(diceResult <= 11) 
+            {
+                Debug.Log("120%"); 
+                damage = (int)(damage * 1.2f);
+            }
+            else if(diceResult <= 12) 
+            {
+                Debug.Log("200%");
+                damage = (int)(damage * 2.0f);
+                AudioManager.instance.PlaySFX(SFX.sfx_critical);
+            }
+        }
+        
 
         // 주사위 눈 초기화
         GameManager.instance.SetCurrentDiceResult(DiceType.None);

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using static Constant;
 
 public class NPCSelectionUI : MonoBehaviour
 {
@@ -74,29 +75,25 @@ public class NPCSelectionUI : MonoBehaviour
     {
         int diceValue = GameManager.instance.currentDiceResultInt;
 
-        if (diceValue == 2)
+        if (diceValue <= 4) 
         {
-            SituationUI.instance.SetSituationText("마왕에게 바로 가자");
-        }
-        else if (diceValue >= 3 && diceValue <= 4) 
-        {
-            SituationUI.instance.SetSituationText("마왕의 부하래래");
+            AudioManager.instance.PlaySFX(SFX.sfx_NPC_Fail);
+            SituationUI.instance.SetSituationText("마왕의 부하였습니다. 전체가 -5hp의 피해를 입습니다.");
+            PartyManager.instance.GetDamageAlivePartyMembers(NPC_DAMAGE_AMOUNT);
         }
         else if (diceValue == 5)
         {
-            SituationUI.instance.SetSituationText("지나가던 행인이래");
+            SituationUI.instance.SetSituationText("지나가던 행인이었습니다. 아무런 효과가 없습니다.");
         }
-        else if (diceValue >= 6 && diceValue <= 7)
+        else if (diceValue >= 6 && diceValue <= 11)
         {
-            SituationUI.instance.SetSituationText("하위 프리스트래");
-        }
-        else if (diceValue >= 9 && diceValue <= 11)
-        {
-            SituationUI.instance.SetSituationText("고위 프리스트래");
+            SituationUI.instance.SetSituationText("고위 프리스트에게 치료를 받습니다. 파티원 전체가 +20hp가 회복됩니다.");
+            PartyManager.instance.HealAlivePartyMembers(NPC_HEAL_AMOUNT);
         }
         else if (diceValue == 12)
         {
-            SituationUI.instance.SetSituationText("위대한 가호래");
+            SituationUI.instance.SetSituationText("위대한 가호를 받습니다. 파티원 전체가 부활하고 파티원 전체의 체력이 100%가 됩니다.");
+            PartyManager.instance.RebirthPartyMembers();
         }
 
         Invoke("TempFadeOut", 1.5f);

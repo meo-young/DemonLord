@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndingCreditUI : MonoBehaviour
 {
@@ -66,7 +67,7 @@ public class EndingCreditUI : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Close();
+                SceneManager.LoadScene("Meoyoung");
             }
             yield return null;
         }

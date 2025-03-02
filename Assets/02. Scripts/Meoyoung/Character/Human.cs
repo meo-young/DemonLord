@@ -7,9 +7,6 @@ public class Human : CharacterBase
         // 기본 데미지 선언
         int damage = attackPower;
 
-        // 주사위 굴리기
-        GameManager.instance.RollDice();
-
         // 상성 적용
         Applycompatibility(target, ref damage);
 
@@ -28,5 +25,9 @@ public class Human : CharacterBase
         target.GetDamage(damage);
     }
 
+    protected override void OnDeath()
+    {
+        base.OnDeath();        
+    }
 
 }
