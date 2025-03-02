@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class AnimationNotify : MonoBehaviour
 {
+
     // 전투 시작 함수
     public void StartBattle()
     {
@@ -12,6 +13,7 @@ public class AnimationNotify : MonoBehaviour
     // 전투 활성화 함수
     public void ActiveBattle()
     {
+        GameManager.instance.SetInactiveWarrant();
         BattleManager.instance.ActiveBattle();
     }
 
@@ -37,5 +39,12 @@ public class AnimationNotify : MonoBehaviour
     public void BattleFadeOut()
     {
         BattleManager.instance.PassOverBattle();
+    }
+
+    // 전투 승리시 SFX 출력
+    public void PlayWinSFX()
+    {
+        AudioManager.instance.StopBGM();
+        AudioManager.instance.PlaySFX(SFX.sfx_clear);
     }
 }
