@@ -33,7 +33,7 @@ public class BattleManager : MonoBehaviour
         // 스테이지 데이터 큐 초기화
         stageDataQueue = new Queue<StageData>(stageDataList);
         
-        StartBattle();
+        //StartBattle();
     }
 
 
