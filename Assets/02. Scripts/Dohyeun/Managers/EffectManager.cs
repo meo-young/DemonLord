@@ -55,15 +55,16 @@ public class EffectManager : MonoBehaviour
         var loaded = Resources.LoadAll<GameObject>(resourcesPath);
         foreach(var go in loaded)
         {
-            Debug.Log(go.name);
+            //Debug.Log(go.name);
             EffectDict.Add(go.name, go);
         }
     }
 
     // 파티클 이펙트 Instantiate, 효과 종료 시 Destory
     // TODO:풀링 및 Play로 디벨롭
+    public void ShowEffect(EffectType key, Vector3 pos) => ShowEffect(key.ToString(), (Vector2)pos);
+    public void ShowEffect(EffectType key, Vector2 pos) => ShowEffect(key.ToString(), pos);
     public void ShowEffect(string key, Vector3 pos) => ShowEffect(key, (Vector2)pos);
-
     public void ShowEffect(string key, Vector2 pos)
     {
         if (!EffectDict.ContainsKey(key)) return;
@@ -77,8 +78,9 @@ public class EffectManager : MonoBehaviour
     }
 
     // sec 시간 지속 후 Stop()
+    public void ShowEffect(EffectType key, Vector3 pos, float sec) => ShowEffect(key.ToString(), (Vector2)pos, sec);
+    public void ShowEffect(EffectType key, Vector2 pos, float sec) => ShowEffect(key.ToString(), pos, sec);
     public void ShowEffect(string key, Vector3 pos, float sec) => ShowEffect(key, (Vector2)pos, sec);
-
     public void ShowEffect(string key, Vector2 pos, float sec)
     {
         if (!EffectDict.ContainsKey(key)) return;
@@ -117,4 +119,14 @@ public class EffectManager : MonoBehaviour
         return worldPos;
     }
 
+}
+public enum EffectType
+{
+    Damage_Melee,
+    Damage_Range,
+    Damage_Magic,
+    Energe_Melee,
+    Energe_Range,
+    Energe_Magic,
+    Mouse_Click,
 }
