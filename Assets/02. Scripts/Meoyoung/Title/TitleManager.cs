@@ -6,6 +6,11 @@ public class TitleManager : MonoBehaviour
     [Header("시작 클릭 시 넘어갈 씬 이름")]
     [SerializeField] private string startSceneName;
 
+    void Start()
+    {
+        AudioManager.instance.PlayBGM(BGM.bgm_Title);
+    }
+
     public void OnStartButtonClick()
     {
         // 페이드 아웃 후 시작 씬으로 이동
