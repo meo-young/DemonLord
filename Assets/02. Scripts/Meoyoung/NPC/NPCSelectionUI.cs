@@ -7,6 +7,9 @@ public class NPCSelectionUI : MonoBehaviour
 {
     public static NPCSelectionUI instance;
 
+    public Button checkBtn;
+    public Button passByBtn;
+
     private void Awake()
     {
         instance = this;
@@ -46,6 +49,9 @@ public class NPCSelectionUI : MonoBehaviour
     /// </summary>
     public void ShowNPCSelectionUI()
     {
+        checkBtn.interactable = true;
+        passByBtn.interactable = true;
+
         // 주사위 결과 텍스트 초기화
         Dice.instance.InitDiceBtn();
 
@@ -95,6 +101,9 @@ public class NPCSelectionUI : MonoBehaviour
             SituationUI.instance.SetSituationText("위대한 가호를 받습니다. 파티원 전체가 부활하고 파티원 전체의 체력이 100%가 됩니다.");
             PartyManager.instance.RebirthPartyMembers();
         }
+
+        checkBtn.interactable = false;
+        passByBtn.interactable = false;
 
         Invoke("TempFadeOut", 1.5f);
     }
