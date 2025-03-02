@@ -155,4 +155,17 @@ public class PartyManager : MonoBehaviour
         CharacterBase character = GetCharacterByType(counterType);
         return character != null && character.isAlive ? character : null;
     }
+
+
+
+    /// <summary>
+    /// 파티 멤버들을 부활시킴
+    /// </summary>
+    public void RebirthPartyMembers()
+    {
+        foreach(CharacterBase member in partyMembers)
+        {
+            member.OnRebirth();
+        }
+    }
 }
