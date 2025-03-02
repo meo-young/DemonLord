@@ -57,7 +57,7 @@ public class ThiefItem : MonoBehaviour
     {
         int diceValue = GameManager.instance.currentDiceResultInt;
 
-        if (diceValue <= 6)
+        if (diceValue >= 10)
         {
             SituationUI.instance.SetSituationText("도적의 가호를 받았습니다.");
             GameManager.instance.GetThiefItem();
