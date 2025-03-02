@@ -11,4 +11,9 @@ public class Enemy : CharacterBase
     {
         base.OnDeath();
     }
+
+    public virtual void GetDamage(int damage)
+    {
+        base.GetDamage(damage);
+    }
 }
