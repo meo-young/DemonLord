@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     [Header("현재 권능")]
     [SerializeField] private IWarrant currentWarrant;
 
+    [Header("현재 특성")]
+    [SerializeField] private IAbility currentAbility;
+
     [Header("HP UI 프리팹")]
     public GameObject hpUIPrefab;
 
@@ -81,7 +84,7 @@ public class GameManager : MonoBehaviour
     // 현재 권능 설정
     public void SetCurrentWarrant(WarrantType warrantType)
     {
-        // 기존 권능이 있다면 제거
+        // 기존 권능이 있다면 return
         if (currentWarrant != null)
         {
             return;
@@ -100,6 +103,8 @@ public class GameManager : MonoBehaviour
                 currentWarrant = gameObject.AddComponent<RandomWarrant>();
                 break;
         }
+
+        Debug.Log("현재 권능: " + currentWarrant.GetType().Name);
     }
 
     // 현재 권능 반환
@@ -112,6 +117,20 @@ public class GameManager : MonoBehaviour
     public void UseWarrant()
     {
         currentWarrant.UseWarrant();
+    }   
+#endregion
+
+#region 특성
+    // 현재 특성 설정
+    public void SetCurrentAbility(AbilityType abilityType)
+    {
+        // 기존 특성이 있다면 return
+        if (currentAbility != null)
+        {
+            return;
+        }
+        
+        
     }
 #endregion
 }
