@@ -18,18 +18,21 @@ public class NormalEnemy : Enemy
         // 같은 타입의 캐릭터 탐색
         if(target == null)
         {
+            Debug.Log("같은 타입의 캐릭터 탐색");
             target = PartyManager.instance.GetSameTypeCharacter(characterType);
         }
 
         // 상성인 캐릭터 탐색
         if(target == null)  
         {
+            Debug.Log("상성인 캐릭터 탐색");
             target = PartyManager.instance.GetCounterTypeCharacter(characterType);
         }
 
         // 모든 캐릭터가 사망한 경우 플레이어 공격
         if(target == null)
         {
+            Debug.Log("모든 캐릭터가 사망한 경우 플레이어 공격");
             target = GameManager.instance.player;
         }
 
@@ -63,6 +66,20 @@ public class NormalEnemy : Enemy
 
     public override void GetDamage(int damage)
     {
+        // 공격 이펙트 출력
+        switch(characterType)
+        {
+            case CharacterType.Warrior:
+                VFXManager.instance.ShowEffect(EffectType.Energe_Melee, transform.position);
+                break;
+            case CharacterType.Ranger:
+                VFXManager.instance.ShowEffect(EffectType.Energe_Range, transform.position);
+                break;
+            case CharacterType.Wizard:
+                VFXManager.instance.ShowEffect(EffectType.Energe_Magic, transform.position);
+                break;
+        }
+
         // 데미지 적용
         currentHealth -= damage;
 

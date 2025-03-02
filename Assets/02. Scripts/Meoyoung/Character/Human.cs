@@ -4,6 +4,7 @@ public class Human : CharacterBase
 {
     public void AttackEnemy(Enemy target)  
     {
+
         // 기본 데미지 선언
         int damage = attackPower;
 
