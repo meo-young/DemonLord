@@ -115,6 +115,21 @@ public class SelectionUI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 선택지 버튼 클릭 이벤트. Dice 결정 버튼에 이벤트 추가
+    /// </summary>
+    /// <param name="index"> 선택지 버튼 인덱스</param>
+    public void OnClickSelectionBtn(int index)
+    {
+        Dice.instance.AddDiceResultEvent(
+            () =>
+            {
+                OnClickAttackBtn(index);
+            }
+        );
+    }
+
+
 
     /// <summary>
     /// 공격 버튼 클릭 이벤트
@@ -124,11 +139,21 @@ public class SelectionUI : MonoBehaviour
     {
         // int를 CharacterType enum으로 변환
         Human human = PartyManager.instance.GetCharacterByType((CharacterType)characterTypeIndex) as Human;
+
+        // 권능 사용
+        if(GameManager.instance.isWarrantActive)
+        {
+            BattleManager.instance.AddEventToQueue(
+                () => GameManager.instance.UseWarrant()
+            );
+        }
         
         // 파티 공격 이벤트 추가
         BattleManager.instance.AddEventToQueue(
-            () => human.AttackEnemy(GameManager.instance.enemy)
-            );
+            () => {
+                human.AttackEnemy(GameManager.instance.enemy);
+            }
+        );
 
         // 적 공격 이벤트 추가
         BattleManager.instance.AddEventToQueue(
