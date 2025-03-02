@@ -5,12 +5,26 @@ using UnityEngine;
 
 public enum BGM // 네이밍 = 파일명
 {
+    bgm_ending,
+    bgm_gameover,
+    bgm_lobby,
+    bgm_opening,
     bgm_test_get_ready,
     bgm_test_moonside_howl,
     COUNT,
 }
 public enum SFX // 네이밍 = 파일명
 {
+    sfx_attack_magic,
+    sfx_attack_melee,
+    sfx_attack_range,
+    sfx_clear,
+    sfx_critical,
+    sfx_damage_demon,
+    sfx_damage_magic,
+    sfx_damage_melee,
+    sfx_damage_range,
+    sfx_dodge,
     sfx_test_coin,
     sfx_test_click,
     COUNT,
