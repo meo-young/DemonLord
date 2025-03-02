@@ -17,6 +17,10 @@ public class EnemySpawner : MonoBehaviour
     
     
 
+    /// <summary>
+    /// 적 캐릭터 생성
+    /// </summary>
+    /// <param name="characterType">생성할 적 캐릭터 타입</param>
     public void SpawnEnemy(CharacterType characterType)
     {
         // 상황 텍스트 설정
@@ -41,5 +45,15 @@ public class EnemySpawner : MonoBehaviour
 
         // 적 캐릭터 설정
         GameManager.instance.enemy = enemy;
+    }
+
+
+
+    /// <summary>
+    /// 적 캐릭터 삭제. 보스 등장 시 호출.
+    /// </summary>
+    public void DestroySelf()
+    {
+        Destroy(enemyGameObject);
     }
 }
