@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6997299540304340303}
   - component: {fileID: 897549050686462093}
   m_Layer: 0
-  m_Name: TestMouseClickEffect01
+  m_Name: Mouse_Click
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

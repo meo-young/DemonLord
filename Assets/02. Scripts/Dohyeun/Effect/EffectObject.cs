@@ -51,8 +51,9 @@ public class EffectObject : MonoBehaviour
     }
     private IEnumerator DestroyWhenParticlesGone()
     {
-        // 모든 파티클이 완전히 사라질 때까지 대기
-        yield return new WaitUntil(() => AreAllParticlesGone());
+        // 모든 파티클이 완전히 사라질 때까지 대기-> 안됨..
+        //yield return new WaitUntil(() => AreAllParticlesGone());
+        yield return new WaitForSeconds(5f); // 임시조치
         Destroy(gameObject);
     }
     private bool AreAllParticlesGone()

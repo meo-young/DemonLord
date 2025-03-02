@@ -53671,9 +53671,9 @@ GameObject:
   - component: {fileID: 7996984474329102239}
   - component: {fileID: 7996984474329102236}
   - component: {fileID: 7996984474329102237}
-  - component: {fileID: 6296972524716903693}
+  - component: {fileID: 7755244703190699968}
   m_Layer: 0
-  m_Name: Lootbeam_Shock_Blue
+  m_Name: Damage_Magic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58543,7 +58543,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &6296972524716903693
+--- !u!114 &7755244703190699968
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
