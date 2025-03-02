@@ -64,7 +64,7 @@ public class PartyRecruitUI : MonoBehaviour
             GameObject positionObject = addPositions[currentPartySize - 1];
             
             // CharacterBase 컴포넌트 추가 및 데이터 설정
-            CharacterBase newCharacter = positionObject.AddComponent<CharacterBase>();
+            Human newCharacter = positionObject.AddComponent<Human>();
             newCharacter.SetCharacterData(selectedData);
 
             // 체력 UI 프리팹 생성
