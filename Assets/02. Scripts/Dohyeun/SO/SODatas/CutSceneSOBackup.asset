@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28428d44bba7c4a4db797cfe130eeca2, type: 3}
-  m_Name: CutSceneSO
+  m_Name: CutSceneSOBackup
   m_EditorClassIdentifier: 
   CutsceneDatas:
   - Id: CutSceneTest
@@ -78,45 +78,21 @@ MonoBehaviour:
       - "\\n<style=Large>\uBAA8\uD5D8\uC774 \uC2DC\uC791\uB418\uC5C8\uB2E4.</style>"
   - Id: Ending
     OneCutscenes:
-    - Background: {fileID: -5112597270616067794, guid: eee2f0046752690408718a96ef095372, type: 3}
-      TextPosition: {x: 200, y: -200}
+    - Background: {fileID: -165846794327719467, guid: 142babe16ab36604eb16981abd58cb31, type: 3}
+      TextPosition: {x: 0, y: 0}
       Texts:
-      - "\uB9C8\uCE68\uB0B4, \uC5EC\uC815 \uB05D\uC5D0 \uB9C8\uC655\uC740 \uC4F0\uB7EC\uC84C\uB2E4."
-      - "\\n\uC554\uD751\uC5D0 \uC7A0\uACBC\uB358 \uD558\uB298\uC774 \uAC77\uD788\uACE0,
-        \uB300\uC9C0\uB294 \uB2E4\uC2DC\uAE08 \uBE5B\uC744 \uB9DE\uC774\uD588\uB2E4."
-      - "\\n\uD3D0\uD5C8\uAC00 \uB41C \uB9C8\uC655\uC758 \uC131\uC5D0\uC11C \uC6A9\uC0AC\uB294
-        \uAC80\uC744 \uB0B4\uB824\uB193\uC558\uB2E4."
-    - Background: {fileID: -5112597270616067794, guid: eee2f0046752690408718a96ef095372, type: 3}
-      TextPosition: {x: 200, y: -200}
+      - Text1
+      - Text2
+      - Text3
+    - Background: {fileID: 8456160606961268066, guid: b8b9b8ab2618c924692042e24d68853b, type: 3}
+      TextPosition: {x: 0, y: -500}
       Texts:
-      - "\uC804\uC7C1\uC740 \uB05D\uB0AC\uB2E4."
-      - "\\n\uADF8\uB7EC\uB098 \uADF8\uC758 \uB9C8\uC74C\uC740 \uC628\uC804\uD788
-        \uAE30\uBED0\uD560 \uC218 \uC5C6\uC5C8\uB2E4."
-      - "\\n\uD568\uAED8 \uC2F8\uC6E0\uB358 \uB3D9\uB8CC\uB4E4\uC758 \uD76C\uC0DD,
-        \uADF8\uB9AC\uACE0 \uB2E4\uC2DC\uB294 \uB3CC\uC544\uC624\uC9C0 \uC54A\uC744
-        \uC2DC\uAC04\uB4E4."
-    - Background: {fileID: -5112597270616067794, guid: eee2f0046752690408718a96ef095372, type: 3}
-      TextPosition: {x: 200, y: -200}
+      - Text4
+      - Text5
+      - Text6
+    - Background: {fileID: 8456160606961268066, guid: b8b9b8ab2618c924692042e24d68853b, type: 3}
+      TextPosition: {x: 500, y: -500}
       Texts:
-      - "\uD558\uC9C0\uB9CC \uC138\uC0C1\uC740 \uC55E\uC73C\uB85C \uB098\uC544\uAC00\uC57C
-        \uD588\uB2E4."
-      - "\\n\uC6A9\uC0AC\uB294 \uAC80\uC744 \uBD09\uC778\uD558\uACE0, \uC0B4\uC544\uB0A8\uC740
-        \uB3D9\uB8CC\uB4E4\uACFC \uD568\uAED8 \uC0C8\uB85C\uC6B4 \uAE38\uC744 \uBAA8\uC0C9\uD588\uB2E4."
-      - "\\n\uB354 \uC774\uC0C1 '\uC6A9\uC0AC'\uB85C \uBD88\uB9B4 \uC774\uC720\uB294
-        \uC5C6\uC5C8\uB2E4. \uC774\uC81C\uB294 \uD3C9\uBC94\uD55C \uC0B6\uC744 \uC0B4\uC544\uAC08
-        \uB54C\uC600\uB2E4."
-    - Background: {fileID: -5112597270616067794, guid: eee2f0046752690408718a96ef095372, type: 3}
-      TextPosition: {x: 200, y: -200}
-      Texts:
-      - "\uC5D8\uB354\uB9B0\uC73C\uB85C \uB3CC\uC544\uC628 \uADF8\uB294 \uC775\uC219\uD55C
-        \uD48D\uACBD \uC18D\uC5D0\uC11C \uC870\uC6A9\uD788 \uBBF8\uC18C\uB97C \uC9C0\uC5C8\uB2E4."
-      - "\\n\uC544\uC774\uB4E4\uC774 \uB6F0\uB180\uACE0, \uC0AC\uB78C\uB4E4\uC740
-        \uB2E4\uC2DC \uD76C\uB9DD\uC744 \uC774\uC57C\uAE30\uD588\uB2E4."
-      - "\\n\uADF8\uB294 \uADF8\uAC83\uB9CC\uC73C\uB85C \uCDA9\uBD84\uD588\uB2E4."
-    - Background: {fileID: -5112597270616067794, guid: eee2f0046752690408718a96ef095372, type: 3}
-      TextPosition: {x: 200, y: -200}
-      Texts:
-      - "\uC774\uC81C \uC804\uC124\uC740 \uB05D\uB0AC\uB2E4."
-      - "\\n\uADF8\uB7EC\uB098 \uC0C8\uB85C\uC6B4 \uC2DC\uB300\uB294 \uB9C9 \uC2DC\uC791\uB418\uB824
-        \uD558\uACE0 \uC788\uC5C8\uB2E4."
-      - \n\n~fin~
+      - Text7\n
+      - Text8\n
+      - Text9

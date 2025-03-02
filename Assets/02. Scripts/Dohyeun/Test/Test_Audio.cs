@@ -14,31 +14,20 @@ public class Test_Sound : MonoBehaviour
     IEnumerator CoTestAudios()
     {
         yield return new WaitForSeconds(1);
-        AudioManager.instance.PlayBGM(BGM.bgm_test_get_ready);
+        AudioManager.instance.PlayBGM(BGM.bgm_opening, isFade: true);
         yield return new WaitForSeconds(3);
-        AudioManager.instance.PlayBGM(BGM.bgm_test_moonside_howl, isFade: true);
+        AudioManager.instance.PlayBGM(BGM.bgm_lobby, isFade: true);
         yield return new WaitForSeconds(3);
-        AudioManager.instance.PlayBGM(BGM.bgm_test_get_ready, isFade: true);
+        AudioManager.instance.PlaySFX(SFX.sfx_attack_magic);
+        yield return new WaitForSeconds(0.2f);
+        AudioManager.instance.PlaySFX(SFX.sfx_attack_magic);
+        yield return new WaitForSeconds(0.2f);
+        AudioManager.instance.PlaySFX(SFX.sfx_attack_magic);
         yield return new WaitForSeconds(3);
-        AudioManager.instance.PlayBGM(BGM.COUNT, isFade: true, fadeSec:5f); // 비활성화
+        AudioManager.instance.PlaySFX(SFX.sfx_clear);
+        AudioManager.instance.PlayBGM(BGM.COUNT, isFade: true);
+        yield return new WaitForSeconds(4);
+        AudioManager.instance.PlayBGM(BGM.bgm_ending, isFade: true);
 
-        yield return new WaitForSeconds(6);
-        AudioManager.instance.PlaySFX(SFX.sfx_test_click);
-        yield return new WaitForSeconds(0.5f);
-        AudioManager.instance.PlaySFX(SFX.sfx_test_click);
-        yield return new WaitForSeconds(0.5f);
-        AudioManager.instance.PlaySFX(SFX.sfx_test_click);
-        yield return new WaitForSeconds(1f);
-
-        AudioManager.instance.PlaySFX(SFX.sfx_test_coin);
-        yield return new WaitForSeconds(1);
-        AudioManager.instance.PlaySFX(SFX.sfx_test_coin);
-        yield return new WaitForSeconds(1);
-        AudioManager.instance.PlaySFX(SFX.sfx_test_coin);
-        yield return new WaitForSeconds(0.08f);
-        AudioManager.instance.PlaySFX(SFX.sfx_test_coin);
-        yield return new WaitForSeconds(0.08f);
-        AudioManager.instance.PlaySFX(SFX.sfx_test_coin);
-        yield return new WaitForSeconds(0.08f);
     }
 }
