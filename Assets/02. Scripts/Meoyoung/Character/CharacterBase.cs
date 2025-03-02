@@ -35,6 +35,11 @@ public class CharacterBase : MonoBehaviour
         isAlive = true;
     }
 
+
+    /// <summary>
+    /// 현재 캐릭터에게 damage 만큼 현재 체력을 감소소
+    /// </summary>
+    /// <param name="damage">적용할 데미지</param>
     public virtual void GetDamage(int damage)
     {
         // 데미지 적용
@@ -50,38 +55,21 @@ public class CharacterBase : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// 현재 캐릭터가 target 캐릭터에게 공격. 추상 클래스인데 설계 잘못함.
+    /// </summary>
+    /// <param name="target">공격할 대상</param>
     public virtual void Attack(CharacterBase target)
     {
-        // 공격 대상이 존재하지 않으면 종료
-        if(target == null) return;
 
-        // 기본 데미지 선언
-        int damage = attackPower;
-
-        // 주사위 굴리기
-        GameManager.instance.RollDice();
-
-        // 같은 직업이 있다면 추가 데미지 적용
-        //ApplySameCharacterTypeDamage(ref damage);
-
-        // 상성 적용
-        Applycompatibility(target, ref damage);
-
-        // 도적이 파티에 존재할 경우 추가 데미지
-        ApplyAssassinDamage(ref damage);
-
-        // 주사위 타입 적용
-        ApplyDiceResult(ref damage);
-
-        Debug.Log($"{characterName}의 공격 ! {target.characterName}에게 {damage}의 데미지 적용");
-
-        // 공격 애니메이션 재생
-        StartCoroutine(SetAttackState());
-
-        // 데미지 적용
-        target.GetDamage(damage);
     }
 
+
+    /// <summary>
+    /// 최대 체력을 초과하지 않는 범위에서 현재 체력을 amount 만큼 회복복
+    /// </summary>
+    /// <param name="amount">회복할 체력</param>
     public virtual void Heal(int amount)
     {
         // amount 만큼 체력 회복
@@ -92,16 +80,11 @@ public class CharacterBase : MonoBehaviour
         }
     }
 
-    public void InitUI()
-    {
-        // 체력 UI 최신화
-        TMP_Text text = GetComponentInChildren<TMP_Text>();
-        text.text = $"{maxHealth} / {currentHealth}";
 
-        Slider slider = GetComponentInChildren<Slider>();
-        slider.value = ((float)currentHealth / (float)maxHealth);
-    }
 
+    /// <summary>
+    /// 캐릭터 부활시 호출. 쓸 일이 있을지 모르겠음음
+    /// </summary>
     public void OnRebirth()
     {
         // 체력 초기화
@@ -114,18 +97,46 @@ public class CharacterBase : MonoBehaviour
         InitUI();
     }
 
+
+
+    /// <summary>
+    /// 체력 UI에 현재 체력을 반영하여여 최신화
+    /// </summary>
+    public void InitUI()
+    {
+        // 체력 UI 최신화
+        TMP_Text text = GetComponentInChildren<TMP_Text>();
+        text.text = $"{maxHealth} / {currentHealth}";
+
+        Slider slider = GetComponentInChildren<Slider>();
+        slider.value = ((float)currentHealth / (float)maxHealth);
+    }
+
+
+
+    /// <summary>
+    /// 캐릭터 사망시 호출. 리소스를 묘비로 변경경
+    /// </summary>
     protected virtual void OnDeath()
     {
         Debug.Log($"{characterName}이(가) 죽었습니다.");
         isAlive = false;
 
-        // @TODO : 캐릭터 묘비로 변경
+        // 캐릭터 이미지 묘비로 변경
+        GetComponent<SpriteRenderer>().sprite = GameManager.instance.tombstoneSprite;
 
         // 체력 UI 비활성화
         transform.GetChild(0).gameObject.SetActive(false);
     }
 
-    private void Applycompatibility(CharacterBase target, ref int damage)
+
+
+    /// <summary>
+    /// 상성일 경우 데미지 증가
+    /// </summary>
+    /// <param name="target">상성을 확인할 target 캐릭터</param>
+    /// <param name="damage">데미지</param>
+    protected void Applycompatibility(CharacterBase target, ref int damage)
     {
         // 각 직업별 상성 처리
         switch(characterType)
@@ -172,7 +183,11 @@ public class CharacterBase : MonoBehaviour
         }
     }
 
-    private void ApplyDiceResult(ref int damage)
+    /// <summary>
+    /// 주사위 타입에 따라 데미지 변화
+    /// </summary>
+    /// <param name="damage">데미지</param>
+    protected void ApplyDiceResult(ref int damage)
     {
         // 주사위 타입에 따라 데미지 변화
         switch(GameManager.instance.GetCurrentDiceResult())
@@ -195,7 +210,11 @@ public class CharacterBase : MonoBehaviour
         GameManager.instance.SetCurrentDiceResult(DiceType.None);
     }
 
-    private void ApplySameCharacterTypeDamage(ref int damage)
+    /// <summary>
+    /// 같은 직업이 있다면 추가 데미지 적용
+    /// </summary>
+    /// <param name="damage">데미지</param>
+    protected void ApplySameCharacterTypeDamage(ref int damage)
     {
         // 같은 직업이 있다면 추가 데미지 적용
         if(PartyManager.instance.IsSameCharacterTypeInParty(characterType))
@@ -204,7 +223,11 @@ public class CharacterBase : MonoBehaviour
         }
     }
 
-    private void ApplyAssassinDamage(ref int damage)
+    /// <summary>
+    /// 도적이 파티에 존재할 경우 추가 데미지
+    /// </summary>
+    /// <param name="damage">데미지</param>
+    protected void ApplyAssassinDamage(ref int damage)
     {
         // 도적이 파티에 존재할 경우 추가 데미지
         if(PartyManager.instance.IsSameCharacterTypeInParty(CharacterType.Assassin))
@@ -213,7 +236,10 @@ public class CharacterBase : MonoBehaviour
         }
     }
 
-    private IEnumerator SetAttackState()
+    /// <summary>
+    /// 공격 애니메이션 재생
+    /// </summary>
+    protected IEnumerator SetAttackState()
     {
         Debug.Log("공격 애니메이션 재생");
         GetComponent<Animator>().SetBool("Attack", true);
@@ -223,7 +249,10 @@ public class CharacterBase : MonoBehaviour
         GetComponent<Animator>().SetBool("Attack", false);
     }
 
-    // 캐릭터 데이터로 초기화하는 메서드 추가
+    /// <summary>
+    /// 캐릭터 데이터로 초기화하는 메서드 추가
+    /// </summary>
+    /// <param name="data">캐릭터 데이터</param>
     public virtual void SetCharacterData(CharacterData data)
     {
         characterName = data.characterName;
@@ -232,5 +261,11 @@ public class CharacterBase : MonoBehaviour
         attackPower = data.attackPower;
         currentHealth = maxHealth;
         isAlive = true;
+
+        // 체력 UI 프리팹 생성
+        GameObject healthUI = Instantiate(GameManager.instance.hpUIPrefab, transform);
+
+        // 체력 최신화
+        InitUI();
     }
 }
