@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player : CharacterBase
+public class Player : Human
 {
     // @TODO : 권능, 특성 추가
 

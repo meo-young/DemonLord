@@ -10,7 +10,15 @@ public class GameManager : MonoBehaviour
     [Header("현재 권능")]
     [SerializeField] private IWarrant currentWarrant;
 
-    public CharacterBase enemy; // 현재 전투 중인 적 캐릭터
+    [Header("HP UI 프리팹")]
+    public GameObject hpUIPrefab;
+
+    [Header("묘비 이미지")]
+    public Sprite tombstoneSprite;
+
+    public Enemy enemy; // 현재 전투 중인 적 캐릭터
+
+    public Player player; // 현재 플레이 중인 플레이어
 
 
     private void Awake()
@@ -24,6 +32,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
 
     private void Start()

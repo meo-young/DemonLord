@@ -1,15 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class BattleFormation : MonoBehaviour
 {
-    public static BattleFormation instance;
-
     Animator anim;
 
     private void Awake()
     {
-        instance = this;
         anim = GetComponent<Animator>();
     }
 

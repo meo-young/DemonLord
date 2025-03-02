@@ -23,74 +23,68 @@ public class SelectionUI : MonoBehaviour
     }
 
 
+
+
+    /// <summary>
+    /// 존재하지 않는 캐릭터 타입에 대해선 UI 회색처리
+    /// 존재한 캐릭터 타입에 대해선 UI 빨간색, 투명도 0.1f로 설정
+    /// </summary>
     public void InitSelectionUI()
     {
         DeactivateSelectionUI();
 
-        // 파티 멤버 가져오기
-        List<CharacterBase> partyMembers = PartyManager.instance.GetPartyMembers();
+        List<CharacterBase> partyMembers = PartyManager.instance.GetAlivePartyMembers();
 
         foreach(CharacterBase member in partyMembers)
         {
-            // 파티에 근거리가 존재할 경우 근거리 공격 선택 활성화
-            if(member.characterType == CharacterType.Warrior)
+            Image image = GetImageByCharacterType(member.characterType);
+            if(image != null)
             {
-                Image image = transform.GetChild(0).GetComponent<Image>();
-                image.color = Color.red;
+                Color color = Color.red;
+                color.a = 0.1f;
+                image.color = color;
             }
-            // 파티에 원거리가 존재할 경우 원거리 공격 선택 활성화
-            else if(member.characterType == CharacterType.Ranger)
+
+            Button button = image?.GetComponent<Button>();
+            if(button != null)
             {
-                Image image = transform.GetChild(1).GetComponent<Image>();
-                image.color = Color.red;
-            }
-            // 파티에 마법사가 존재할 경우 마법 공격 선택 활성화
-            else if(member.characterType == CharacterType.Wizard)
-            {
-                Image image = transform.GetChild(2).GetComponent<Image>();
-                image.color = Color.red;
+                button.enabled = false;
             }
         }
     }
 
 
-    public void SetSelectionUIAlpha(float alpha, bool isActive)
-    {
-        List<CharacterBase> partyMembers = PartyManager.instance.GetPartyMembers();
 
-        // 파티 멤버의 직업에 따라 해당 UI만 투명도를 alpha로 설정
+    /// <summary>
+    /// 존재하고 살아있는 캐릭터 타입에 대한 UI만 활성화
+    /// </summary>
+    public void SetActiveSelectionUI()
+    {
+        // 살아있는 파티 멤버 반환
+        List<CharacterBase> partyMembers = PartyManager.instance.GetAlivePartyMembers();
+
+        // 해당되는 UI만 활성화
         foreach(CharacterBase member in partyMembers)
         {
-            Image image = null;
-            Button button = null;
-            if(member.characterType == CharacterType.Warrior)
-            {
-                image = transform.GetChild(0).GetComponent<Image>();
-                button = transform.GetChild(0).GetComponent<Button>();
-            }
-            else if(member.characterType == CharacterType.Ranger)
-            {
-                image = transform.GetChild(1).GetComponent<Image>();
-                button = transform.GetChild(1).GetComponent<Button>();
-            }
-            else if(member.characterType == CharacterType.Wizard)
-            {
-                image = transform.GetChild(2).GetComponent<Image>();
-                button = transform.GetChild(2).GetComponent<Button>();
-            }
+            Image image = GetImageByCharacterType(member.characterType);
+            Button button = image?.GetComponent<Button>();
 
             if(image != null)
             {
-                image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
+                image.color = new Color(image.color.r, image.color.g, image.color.b, 1.0f);
             }
             if(button != null)
             {
-                button.enabled = isActive;
+                button.enabled = true;
             }
         }
     }
 
 
+
+    /// <summary>
+    /// 선택지 UI 모두 비활성화
+    /// </summary>
     public void DeactivateSelectionUI()
     {
         // 선택지 UI 색상을 회색으로 변경하고 버튼 비활성화
@@ -109,25 +103,48 @@ public class SelectionUI : MonoBehaviour
         }
     }
 
-    public void OnClickMeleeAttack()
+
+
+    /// <summary>
+    /// 공격 버튼 클릭 이벤트
+    /// </summary>
+    /// <param name="characterTypeIndex"> 공격을 진행할 캐릭터 인덱스</param>
+    public void OnClickAttackBtn(int characterTypeIndex)
     {
-        // 근거리 공격
-        Debug.Log("근거리 공격");
-        PartyManager.instance.GetCharacterByType(CharacterType.Warrior).Attack(GameManager.instance.enemy);
+        // int를 CharacterType enum으로 변환
+        CharacterType characterType = (CharacterType)characterTypeIndex;
         
+        // 파티 공격 이벤트 추가
+        BattleManager.instance.AddEventToQueue(
+            () => PartyManager.instance.GetCharacterByType(characterType).Attack(GameManager.instance.enemy)
+            );
+
+        // 적 공격 이벤트 추가
+        BattleManager.instance.AddEventToQueue(
+            () => GameManager.instance.enemy.AttackPlayer()
+            );
+
+        // 이벤트 큐 처리
+        BattleManager.instance.StartEventProcess();
     }
 
-    public void OnClickRangedAttack()
-    {
-        // 원거리 공격
-        Debug.Log("원거리 공격");
-        PartyManager.instance.GetCharacterByType(CharacterType.Ranger).Attack(GameManager.instance.enemy);
-    }
 
-    public void OnClickMagicAttack()
+
+    /// <summary>
+    /// 캐릭터 타입에 따른 이미지 반환
+    /// </summary>
+    /// <param name="type"> 캐릭터 타입</param>
+    /// <returns> 캐릭터 타입에 따른 이미지</returns>
+    private Image GetImageByCharacterType(CharacterType type)
     {
-        // 마법 공격
-        Debug.Log("마법 공격");
-        PartyManager.instance.GetCharacterByType(CharacterType.Wizard).Attack(GameManager.instance.enemy);
+        int childIndex = type switch
+        {
+            CharacterType.Warrior => 0,
+            CharacterType.Ranger => 1,
+            CharacterType.Wizard => 2,
+            _ => -1
+        };
+
+        return childIndex >= 0 ? transform.GetChild(childIndex).GetComponent<Image>() : null;
     }
 }
