@@ -28,4 +28,5 @@ public class Human : CharacterBase
         target.GetDamage(damage);
     }
 
+
 }
