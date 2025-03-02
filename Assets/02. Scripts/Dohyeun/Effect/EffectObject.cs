@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -35,10 +36,35 @@ public class EffectObject : MonoBehaviour
             Invoke(nameof(StopEffect), timer);
         }
     }
+    ParticleSystem[] particleSystems;
+    VisualEffect[] visualEffects;
     public void StopEffect()
     {
-        if (particleSystem) particleSystem.Stop();
-        if (visualEffect) visualEffect.Stop();
-        Destroy(gameObject, 3f);
+        particleSystems = GetComponentsInChildren<ParticleSystem>();
+        visualEffects = GetComponentsInChildren<VisualEffect>();
+
+        foreach (var ps in particleSystems)
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        foreach (var vfx in visualEffects)
+            vfx.Stop();
+        StartCoroutine(DestroyWhenParticlesGone());
+    }
+    private IEnumerator DestroyWhenParticlesGone()
+    {
+        // 모든 파티클이 완전히 사라질 때까지 대기
+        yield return new WaitUntil(() => AreAllParticlesGone());
+        Destroy(gameObject);
+    }
+    private bool AreAllParticlesGone()
+    {
+        foreach (var ps in particleSystems)
+        {
+            if (ps.IsAlive(true)) return false; // 아직 살아있는 파티클이 있다면 대기
+        }
+        foreach (var vfx in visualEffects)
+        {
+            if (vfx.HasAnySystemAwake()) return false;
+        }
+        return true; // 모든 파티클이 사라지면.
     }
 }
