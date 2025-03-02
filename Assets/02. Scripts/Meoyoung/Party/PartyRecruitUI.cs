@@ -45,7 +45,7 @@ public class PartyRecruitUI : MonoBehaviour
         DeactivateCharacterImages();
 
         // 버튼 활성화
-        recruitBtn.interactable = true;
+        recruitBtn.enabled = true;
 
         // 클릭된 캐릭터 인덱스 저장
         currentCharacterIndex = index;
@@ -87,6 +87,8 @@ public class PartyRecruitUI : MonoBehaviour
     /// </summary>
     public void ShowRecruitPanel()
     {
+        AudioManager.instance.PlayBGM(BGM.bgm_Recruit);
+
         // 모집 횟수 초기화
         recruitCount = 0;
 
@@ -133,20 +135,14 @@ public class PartyRecruitUI : MonoBehaviour
 
         foreach(CharacterBase member in partyMembers)
         {
-            // 파티에 근거리가 존재할 경우 근거리 모집 비활성화
-            if(member.characterType == CharacterType.Warrior)
+            if(member.characterType == CharacterType.Ranger)
             {
                 transform.GetChild(0).transform.localScale = Vector3.zero;
-            }
-            // 파티에 원거리가 존재할 경우 원거리 모집 비활성화
-            else if(member.characterType == CharacterType.Ranger)
-            {
-                transform.GetChild(1).transform.localScale = Vector3.zero;
             }
             // 파티에 마법사가 존재할 경우 마법 모집 비활성화
             else if(member.characterType == CharacterType.Wizard)
             {
-                transform.GetChild(2).transform.localScale = Vector3.zero;
+                transform.GetChild(1).transform.localScale = Vector3.zero;
             }
         }
 
@@ -172,7 +168,7 @@ public class PartyRecruitUI : MonoBehaviour
     /// <summary>
     /// 선택지 버튼 비활성화
     /// </summary>
-    private void SelectionBtnDeactivate()
+    public void SelectionBtnDeactivate()
     {
         int childCount = transform.childCount;
         for(int i = 0; i < childCount; i++)
@@ -301,11 +297,13 @@ public class PartyRecruitUI : MonoBehaviour
 
         if (isSuccess)
         {
+            AudioManager.instance.PlaySFX(SFX.sfx_Recruit_Success);
             SuccessRecruit();
             SituationUI.instance.SetSituationText("동료 모집에 성공했습니다 !");
         }
         else
         {
+            AudioManager.instance.PlaySFX(SFX.sfx_Recruit_Fail);
             FailRecruit();
             SituationUI.instance.SetSituationText("동료 모집에 실패했습니다.");
         }
