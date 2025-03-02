@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : Human
 {
@@ -21,7 +22,12 @@ public class Player : Human
     {
         base.OnDeath();
 
-        Debug.Log("게임 종료 해라");
+        Invoke("GameOver", 3f);
         
+    }
+
+    private void GameOver()
+    {
+        SceneManager.LoadScene("Dead");
     }
 }
