@@ -19,6 +19,9 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy(CharacterType characterType)
     {
+        // 상황 텍스트 설정
+        SituationUI.instance.SetSituationText("몬스터와 조우했습니다. 공격을 선택해주세요.");
+
         // 적 캐릭터 데이터 가져오기
         CharacterData enemyData = characterType switch
         {

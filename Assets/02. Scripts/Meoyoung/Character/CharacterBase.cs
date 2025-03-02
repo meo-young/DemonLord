@@ -69,6 +69,9 @@ public class CharacterBase : MonoBehaviour
         {
             currentHealth = maxHealth;
         }
+
+        // 체력 UI 최신화
+        InitUI();
     }
 
 
@@ -218,7 +221,7 @@ public class CharacterBase : MonoBehaviour
     protected void ApplyAssassinDamage(ref int damage)
     {
         // 도적이 파티에 존재할 경우 추가 데미지
-        if(PartyManager.instance.IsSameCharacterTypeInParty(CharacterType.Assassin))
+        if(GameManager.instance.isThiefItem)
         {
             damage = (int)(damage * 1.5f);
         }
