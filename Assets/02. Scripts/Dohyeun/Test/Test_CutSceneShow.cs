@@ -4,6 +4,6 @@ public class Test_CutSceneShow : MonoBehaviour
 {
     private void Start()
     {
-        LDHUIManager.instance.ShowCutScene("CutSceneTest");
+        LDHUIManager.instance.ShowCutScene("Opening");
     }
 }
