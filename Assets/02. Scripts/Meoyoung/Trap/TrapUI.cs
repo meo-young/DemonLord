@@ -1,4 +1,5 @@
 using UnityEngine;
+using static Constant;
 
 public class TrapUI : MonoBehaviour
 {
@@ -64,11 +65,13 @@ public class TrapUI : MonoBehaviour
             if (diceValue <= 3 - trapHandicap)
             {
                 AttackAllPartyMembers();
-                SituationUI.instance.SetSituationText("파티가 함정에 빠지게 되었습니다");
+                AudioManager.instance.PlaySFX(SFX.sfx_Trapped);
+                SituationUI.instance.SetSituationText("파티원들의 체력이 5 감소하였습니다 !");
             }
             else
             {
                 SituationUI.instance.SetSituationText("무사히 탈출에 성공하였습니다");
+                AudioManager.instance.PlaySFX(SFX.sfx_NoTrapped);
             }
         }
         else
@@ -76,11 +79,13 @@ public class TrapUI : MonoBehaviour
             if (diceValue <= 6 - trapHandicap)
             {
                 AttackAllPartyMembers();
-                SituationUI.instance.SetSituationText("파티가 함정에 빠지게 되었습니다");
+                AudioManager.instance.PlaySFX(SFX.sfx_Trapped);
+                SituationUI.instance.SetSituationText("파티원들의 체력이 5 감소하였습니다 !");
             }
             else
             {
                 SituationUI.instance.SetSituationText("무사히 탈출에 성공하였습니다");
+                AudioManager.instance.PlaySFX(SFX.sfx_NoTrapped);
             }
         }
         
@@ -92,7 +97,7 @@ public class TrapUI : MonoBehaviour
     {
         foreach (var member in PartyManager.instance.GetPartyMembers())
         {
-            member.GetDamage(5);
+            member.GetDamage(TRAP_DAMAGE_AMOUNT);
         }
     }
 
