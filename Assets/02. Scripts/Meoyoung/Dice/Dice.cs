@@ -57,12 +57,15 @@ public class Dice : MonoBehaviour
         diceResult = UnityEngine.Random.Range(2, 13);
         GameManager.instance.currentDiceResultInt = diceResult;
 
+        // 특성에 따라 주사위 결과에 영향을 주는 핸디캡 적용
+        int handicap = GameManager.instance.damageHandicap;
+
         // 결과에 따라 주사위 타입을 반환
-        if(diceResult >= 2 && diceResult <= 4)
+        if(diceResult <= 4 - handicap)
         {
             return DiceType.Bad;
         }
-        else if(diceResult >= 5 && diceResult <= 10)
+        else if(diceResult <= 10 - handicap)
         {
             return DiceType.Normal;
         }
@@ -74,7 +77,7 @@ public class Dice : MonoBehaviour
 
 
     /// <summary>
-    /// 주사위 굴린 후 등록된 이벤트 호출
+    /// 주사위 굴린 후 호출할 이벤트 등록
     /// </summary>
     /// <param name="diceResultEvent">등록할 이벤트</param>
     public void AddDiceResultEvent(Action diceResultEvent)
@@ -85,6 +88,9 @@ public class Dice : MonoBehaviour
             this.diceResultEvent = null;
         }
 
+        // 주사위 버튼 활성화
+        diceButton.interactable = true;
+
         this.diceResultEvent += diceResultEvent;
     }
 
@@ -93,10 +99,12 @@ public class Dice : MonoBehaviour
     /// <summary>
     /// 주사위 결과 텍스트 초기화
     /// </summary>
-    public void InitDiceResultText()
+    public void InitDiceBtn()
     {
         diceResultText.rectTransform.localScale = Vector3.zero;
         diceResultText.text = "";
+
+        diceButton.interactable = false;
     }
 
 
@@ -108,6 +116,12 @@ public class Dice : MonoBehaviour
     {
         // 주사위 버튼 비활성화
         diceButton.enabled = false;
+
+        // 선택지 UI 비활성화
+        SelectionUI.instance.InitSelectionUI();
+
+        // 권능 버튼 비활성화
+        GameManager.instance.SetWarrantButtonDeactive();
 
         Roll();
         StartCoroutine(RollDice());
@@ -128,8 +142,7 @@ public class Dice : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
 
         // 주사위 결과 텍스트 표시
-        diceResultText.rectTransform.localScale = Vector3.one;
-        diceResultText.text = diceResult.ToString();
+        SetDiceResultText(diceResult);
 
         // 주사위 굴리는 애니메이션 종료
         diceAnimator.SetBool("Roll", false);
@@ -141,5 +154,17 @@ public class Dice : MonoBehaviour
 
         // 주사위 버튼 활성화
         diceButton.enabled = true;
+    }
+
+
+
+    /// <summary>
+    /// 주사위 결과 텍스트 설정
+    /// </summary>
+    /// <param name="diceResult">주사위 결과</param>
+    public void SetDiceResultText(int diceResult)
+    {
+        diceResultText.rectTransform.localScale = Vector3.one;
+        diceResultText.text = diceResult.ToString();
     }
 }

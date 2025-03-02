@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,10 +14,18 @@ public class GameManager : MonoBehaviour
     public Button diceButton;
 
     [Header("현재 권능")]
-    [SerializeField] private IWarrant currentWarrant;
+    [SerializeField] private TMP_Text warrantText;
+    [SerializeField] private Button warrantButton;
+    public bool isWarrantUsed = false; // 권능 사용 여부
+    public bool isWarrantActive = false; // 권능 활성화 여부
+
 
     [Header("현재 특성")]
     [SerializeField] private IAbility currentAbility;
+    [SerializeField] private TMP_Text abilityText;
+    public int trapHandicap = 0;
+    public int peerHandicap = 0;
+    public int damageHandicap = 0;
 
     [Header("HP UI 프리팹")]
     public GameObject hpUIPrefab;
@@ -24,10 +33,15 @@ public class GameManager : MonoBehaviour
     [Header("묘비 이미지")]
     public Sprite tombstoneSprite;
 
+    [Header("도적의 가호 아이템")]
+    public bool isThiefItem = false;
+    public TMP_Text thiefItemText;
+
+
     public Enemy enemy; // 현재 전투 중인 적 캐릭터
-
     public Player player; // 현재 플레이 중인 플레이어
-
+    
+    private IWarrant currentWarrant;
 
     private void Awake()
     {
@@ -107,7 +121,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        Debug.Log("현재 권능: " + currentWarrant.GetType().Name);
+        warrantText.text = WarrantManager.instance.GetWarrantDescription(warrantType);
     }
 
     // 현재 권능 반환
@@ -121,6 +135,35 @@ public class GameManager : MonoBehaviour
     {
         currentWarrant.UseWarrant();
     }   
+
+    // 권능 사용 여부 설정
+    public void SetActiveWarrant()
+    {
+        isWarrantUsed = true;
+        isWarrantActive = true;
+        warrantButton.interactable = false;
+    }
+
+    // 권능 사용 여부 해제
+    public void SetInactiveWarrant()
+    {
+        isWarrantUsed = false;
+        isWarrantActive = false;
+        warrantButton.interactable = true;
+    }
+
+    // 권능 버튼 비활성화
+    public void SetWarrantButtonDeactive()
+    {
+        warrantButton.interactable = false;
+    }
+
+    // 권능 버튼 활성화
+    public void SetWarrantButtonActive()
+    {
+        warrantButton.interactable = true;
+    }
+
 #endregion
 
 #region 특성
@@ -132,8 +175,35 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        
-        
+
+        // 특성 타입에 따른 특성 추가
+        switch (abilityType)
+        {
+            case AbilityType.BattleMaster:
+                currentAbility = gameObject.AddComponent<BattleMaster>();
+                break;
+            case AbilityType.PeerMaster:
+                currentAbility = gameObject.AddComponent<PeerMaster>();
+                break;
+            case AbilityType.TrapMaster:
+                currentAbility = gameObject.AddComponent<TrapMaster>();
+                break;
+        }
+
+        abilityText.text = AbilityManager.instance.GetAbilityDescription(abilityType);
     }
 #endregion
+
+#region 도적의 가호 아이템
+    // 도적의 가호 아이템 활성화
+    public void GetThiefItem()
+    {
+        isThiefItem = true;
+        thiefItemText.text = "활성화";
+        Image img = thiefItemText.transform.parent.GetComponent<Image>();
+        img.color = new Color(img.color.r, img.color.g, img.color.b, 1);
+    }
+#endregion
+
+
 }

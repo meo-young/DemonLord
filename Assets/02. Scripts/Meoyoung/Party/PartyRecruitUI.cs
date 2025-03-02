@@ -61,34 +61,11 @@ public class PartyRecruitUI : MonoBehaviour
     /// </summary>
     public void OnClickRecruitBtn()
     {
-        if (currentCharacterIndex >= 0 && currentCharacterIndex < characterDatas.Length)
-        {
-            CharacterData selectedData = characterDatas[currentCharacterIndex];
-            int currentPartySize = PartyManager.instance.GetPartyMemberNum();
-            
-            // 현재 파티 크기를 인덱스로 사용하여 위치 지정
-            GameObject positionObject = addPositions[currentPartySize - 1];
-            
-            // CharacterBase 컴포넌트 추가 및 데이터 설정
-            Human newCharacter = positionObject.AddComponent<Human>();
-            newCharacter.SetCharacterData(selectedData);
-            
-            // 스프라이트 이미지 설정
-            SpriteRenderer spriteRenderer = positionObject.GetComponent<SpriteRenderer>();
-            if (spriteRenderer == null)
-            {
-                spriteRenderer = positionObject.AddComponent<SpriteRenderer>();
-            }
-            spriteRenderer.sprite = selectedData.characterSprite;
-            
-            // 파티에 멤버 추가
-            PartyManager.instance.AddMember(newCharacter);
-        }
-
         // 클릭된 캐릭터 이미지 비활성화
         characterImages[currentCharacterIndex].transform.localScale = Vector3.zero;
 
-        IsSuccessRecruit();
+        // 모집 결과 확인
+        GetRecruitResult();
 
         SelectionBtnDeactivate();
 
@@ -135,9 +112,6 @@ public class PartyRecruitUI : MonoBehaviour
         // 모집 패널 비활성화
         transform.localScale = Vector3.zero;
         bottomRecruitPanel.transform.localScale = Vector3.zero;
-
-        // 공격 선택지 패널 활성화
-        SelectionUI.instance.transform.localScale = Vector3.one;
     }
 
     
@@ -221,8 +195,11 @@ public class PartyRecruitUI : MonoBehaviour
     /// <summary>
     /// 모집 성공 텍스트 활성화
     /// </summary>
-    private void IsSuccessRecruit()
-    {
+    private void SuccessRecruit()
+    {   
+        // 동료 모집
+        Recruit();
+
         recruitResultText.gameObject.SetActive(false);
         recruitResultSubText.gameObject.SetActive(false);
 
@@ -233,6 +210,97 @@ public class PartyRecruitUI : MonoBehaviour
         // 모집 성공 텍스트 활성화
         recruitResultSubText.gameObject.SetActive(true);
         recruitResultSubText.text = "동료 모집에 성공했습니다 !";
+    }
+
+
+    /// <summary>
+    /// 모집 실패 텍스트 활성화
+    /// </summary>
+    private void FailRecruit()
+    {
+        recruitResultText.gameObject.SetActive(false);
+        recruitResultSubText.gameObject.SetActive(false);
+
+        // 모집 실패 텍스트 활성화
+        recruitResultText.gameObject.SetActive(true);
+        recruitResultText.text = "실패 !";
+
+        // 모집 실패 텍스트 활성화
+        recruitResultSubText.gameObject.SetActive(true);
+        recruitResultSubText.text = "동료 모집에 실패했습니다.";
+    }
+
+
+
+    /// <summary>
+    /// 동료 모집
+    /// </summary>
+    private void Recruit()
+    {
+        if (currentCharacterIndex >= 0 && currentCharacterIndex < characterDatas.Length)
+        {
+            CharacterData selectedData = characterDatas[currentCharacterIndex];
+            int currentPartySize = PartyManager.instance.GetPartyMemberNum();
+            
+            // 현재 파티 크기를 인덱스로 사용하여 위치 지정
+            GameObject positionObject = addPositions[currentPartySize - 1];
+            
+            // CharacterBase 컴포넌트 추가 및 데이터 설정
+            Human newCharacter = positionObject.AddComponent<Human>();
+            newCharacter.SetCharacterData(selectedData);
+            
+            // 스프라이트 이미지 설정
+            SpriteRenderer spriteRenderer = positionObject.GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                spriteRenderer = positionObject.AddComponent<SpriteRenderer>();
+            }
+            spriteRenderer.sprite = selectedData.characterSprite;
+            
+            // 파티에 멤버 추가
+            PartyManager.instance.AddMember(newCharacter);
+        }
+    }
+
+
+
+
+    /// <summary>
+    /// 모집 결과 확인
+    /// </summary>
+    private void GetRecruitResult()
+    {
+        int diceValue = GameManager.instance.currentDiceResultInt;
+        int partySize = PartyManager.instance.GetPartyMemberNum();
+
+        bool isSuccess = false;
+
+        switch (partySize)
+        {
+            case 1:
+                isSuccess = true;
+                break;
+            case 2:
+                isSuccess = diceValue > 5;
+                break;
+            case 3:
+                isSuccess = diceValue > 9;
+                break;
+        }
+
+        recruitResultText.gameObject.SetActive(true);
+        recruitResultSubText.gameObject.SetActive(true);
+
+        if (isSuccess)
+        {
+            SuccessRecruit();
+            SituationUI.instance.SetSituationText("동료 모집에 성공했습니다 !");
+        }
+        else
+        {
+            FailRecruit();
+            SituationUI.instance.SetSituationText("동료 모집에 실패했습니다.");
+        }
     }
 
 }

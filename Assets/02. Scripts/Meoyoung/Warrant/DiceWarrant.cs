@@ -7,6 +7,7 @@ public class DiceWarrant : MonoBehaviour, IWarrant
         Debug.Log("주사위 권능 사용");
         
         // 주사위를 가장 좋은 결과로 설정
-        GameManager.instance.SetCurrentDiceResult(DiceType.Good);
+        GameManager.instance.currentDiceResultInt = 12;
+        Dice.instance.SetDiceResultText(GameManager.instance.currentDiceResultInt);
     }
 }
