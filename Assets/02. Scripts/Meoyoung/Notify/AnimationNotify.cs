@@ -13,7 +13,6 @@ public class AnimationNotify : MonoBehaviour
     // 전투 활성화 함수
     public void ActiveBattle()
     {
-        GameManager.instance.SetInactiveWarrant();
         BattleManager.instance.ActiveBattle();
     }
 
