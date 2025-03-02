@@ -8,7 +8,7 @@ public class WarrantUI : MonoBehaviour
 
     private int currentWarrantCount = -1;
 
-
+    public Image[] warrantCard;
 
     /// <summary>
     /// 권능 카드를 클릭할 시 결정하기 버튼 활성화
@@ -18,6 +18,8 @@ public class WarrantUI : MonoBehaviour
     {
         currentWarrantCount = count;
         confirmWarrantButton.interactable = true;
+
+        InitWarrantUI();
     }
 
 
@@ -39,5 +41,24 @@ public class WarrantUI : MonoBehaviour
     private void DeactiveWarrantUI()
     {
         AbilityWarrantUI.instance.ProcessEventQueue();
+    }
+
+
+    /// <summary>
+    /// 특성 UI 초기화
+    /// </summary>
+    private void InitWarrantUI()
+    {
+        if(currentWarrantCount < 0 || currentWarrantCount >= warrantCard.Length)
+        {
+            return;
+        }
+
+        foreach(Image card in warrantCard)
+        {
+            card.sprite = GameManager.instance.cardBack;
+        }
+
+        warrantCard[currentWarrantCount].sprite = GameManager.instance.cardFront;
     }
 }
