@@ -4,15 +4,16 @@ using UnityEngine.UI;
 
 public class NPCSelectionUI : MonoBehaviour
 {
-    [Header("결정 버튼")]
-    [SerializeField] private Button decisionButton;
+    public static NPCSelectionUI instance;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
 
     public void OnClickCheckBtn()
     {
-        // 결정 버튼 활성화
-        decisionButton.interactable = true;
-
         Dice.instance.AddDiceResultEvent(CheckNPCEvent);
     }
 
@@ -24,9 +25,6 @@ public class NPCSelectionUI : MonoBehaviour
     /// </summary>
     public void OnClickPassByBtn()
     {
-        // 결정 버튼 활성화
-        decisionButton.interactable = true;
-
         Dice.instance.AddDiceResultEvent(PassByEvent);
     }
 
@@ -38,6 +36,23 @@ public class NPCSelectionUI : MonoBehaviour
     private void PassByEvent()
     {
         TempFadeOut();
+    }
+
+
+
+    /// <summary>
+    /// NPC 이벤트 활성화
+    /// </summary>
+    public void ShowNPCSelectionUI()
+    {
+        // 주사위 결과 텍스트 초기화
+        Dice.instance.InitDiceBtn();
+
+        // UI 활성화
+        transform.localScale = Vector3.one;
+
+        // 상황 텍스트 설정
+        SituationUI.instance.SetSituationText("의문의 NPC와 조우했습니다.");
     }
 
 

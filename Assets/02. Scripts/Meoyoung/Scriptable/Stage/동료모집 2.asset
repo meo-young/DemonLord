@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3737943d2a9ee5e4e887b23ffdd05271, type: 3}
-  m_Name: Stage2-3
+  m_Name: "\uB3D9\uB8CC\uBAA8\uC9D1 2"
   m_EditorClassIdentifier: 
-  stageNumber: "\uC2A4\uD14C\uC774\uC9C0 2-3"
-  meleeMonsterProbability: 25
-  rangedMonsterProbability: 25
-  magicMonsterProbability: 10
-  trapProbability: 15
+  stageNumber: "\uB3D9\uB8CC \uBAA8\uC9D1 \uC2A4\uD14C\uC774\uC9C0"
+  meleeMonsterProbability: 0
+  rangedMonsterProbability: 0
+  magicMonsterProbability: 0
+  trapProbability: 0
   npcProbability: 0
-  isRecruit: 0
+  isRecruit: 1
   isItemRecruit: 0

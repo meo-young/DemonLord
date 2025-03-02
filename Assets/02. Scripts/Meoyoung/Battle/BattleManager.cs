@@ -51,27 +51,14 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public void StartBattle()
     {
-        // 선택지 UI 표시
-        SelectionUI.instance.ShowSelectionUI();
-
         // 주사위 결과 텍스트 초기화
-        Dice.instance.InitDiceResultText();
-
-        // 애니메이션 초기화 용.. 야메 ..
-        battleFormation.gameObject.SetActive(false);
-        battleFormation.gameObject.SetActive(true);
+        Dice.instance.InitDiceBtn();
 
         // Fade In 연출로 전투 시작
         FadeManager.instance.FadeIn();
 
         // 다음 스테이지 데이터 처리
         ProcessNextStageData();
-
-        // 대형을 모두 갖춘 경우 선택지 UI 활성화
-        battleFormation.StartBattleFormation();
-
-        // 배틀 여부 활성화
-        isBattle = true;
     }
 
 
@@ -95,6 +82,21 @@ public class BattleManager : MonoBehaviour
         // 배틀 중이 아니면 return
         if(isBattle == false) return;
 
+
+        // 권능 적용 해제
+        if(GameManager.instance.isWarrantActive)
+        {
+            GameManager.instance.isWarrantActive = false;
+        }
+        // 사용한 적이 없다면 권능 버튼 활성화
+        else
+        {
+            GameManager.instance.SetWarrantButtonActive();
+        }
+
+        // 주사위 결과 텍스트 초기화
+        Dice.instance.InitDiceBtn();
+
         // 선택지 UI 활성화
         SelectionUI.instance.InitSelectionUI();
         SelectionUI.instance.SetActiveSelectionUI();
@@ -109,6 +111,7 @@ public class BattleManager : MonoBehaviour
     {
         // 배틀 여부 비활성화
         isBattle = false;
+        GameManager.instance.SetWarrantButtonDeactive();
 
         // 승리 화면 표시
         //BattleWinUI.instance.ShowWinUI();
@@ -122,7 +125,7 @@ public class BattleManager : MonoBehaviour
     {
         // 배틀 여부 비활성화
         isBattle = false;
-
+        GameManager.instance.SetWarrantButtonDeactive();
 
         // 패배 화면 표시
         //BattleLoseUI.instance.ShowLoseUI();
@@ -212,6 +215,19 @@ public class BattleManager : MonoBehaviour
         // 랜덤 확률 계산
         int randomValue = UnityEngine.Random.Range(0, 100);
         int probabilitySum = 0;
+
+
+        if(currentStage.isRecruit)
+        {
+            PartyRecruitUI.instance.ShowRecruitPanel();
+            return;
+        }
+
+        if(currentStage.isItemRecruit)
+        {
+            ThiefItem.instance.ShowThiefItem();
+            return;
+        }
         
         // 근접 몬스터 확률 체크
         if (randomValue < (probabilitySum += currentStage.meleeMonsterProbability))
@@ -235,23 +251,37 @@ public class BattleManager : MonoBehaviour
         else if (randomValue < (probabilitySum += currentStage.trapProbability))
         {
             Debug.Log($"함정 발견! (확률: {currentStage.trapProbability}%)");
+            TrapUI.instance.ShowTrapUI();
+            return;
         }
         // NPC 확률 체크
         else if (randomValue < (probabilitySum += currentStage.npcProbability))
         {
-            Debug.Log($"NPC 조우! (확률: {currentStage.npcProbability}%)");
+            if(PartyManager.instance.GetPartyMemberNum() >= 4)
+            {
+                // 다음 스테이지 데이터 처리
+                ProcessNextStageData();
+                Debug.Log("모든 동료를 모집했습니다.");
+            }
+            else
+            {
+                Debug.Log($"NPC 조우! (확률: {currentStage.npcProbability}%)");
+                NPCSelectionUI.instance.ShowNPCSelectionUI();
+            }
+            return;
         }
 
-        // 동료 모집 체크
-        if (currentStage.isRecruit)
-        {
-            Debug.Log("동료 모집 가능한 스테이지입니다!");
-        }
+        // 배틀 여부 활성화
+        isBattle = true;
 
-        // 아이템 획득 체크
-        if (currentStage.isItemRecruit)
-        {
-            Debug.Log("아이템 획득 가능한 스테이지입니다!");
-        }
+        // 선택지 UI 표시
+        SelectionUI.instance.ShowSelectionUI();
+    
+        // 애니메이션 초기화 용.. 야메 ..
+        battleFormation.gameObject.SetActive(false);
+        battleFormation.gameObject.SetActive(true);
+
+        // 대형을 모두 갖춘 경우 선택지 UI 활성화
+        battleFormation.StartBattleFormation();
     }
 }
