@@ -14,26 +14,35 @@ public class BattleManager : MonoBehaviour
     private Queue<Action> eventQueue = new Queue<Action>(); // 이벤트 처리 순서를 저장하는 큐
     private bool isProcessingQueue = false; // 이벤트 큐 처리 여부
 
-    private EnemySpawner enemySpawner;
-    private BattleFormation battleFormation;
+    [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private BattleFormation battleFormation;
 
     private bool isBattle = false;
 
     private void Awake()
     {
         instance = this;
-
-        enemySpawner = GetComponent<EnemySpawner>();
-        battleFormation = FindFirstObjectByType<BattleFormation>();
     }
 
 
 
-    private void Start() {
+    private void Start() 
+    {
         // 스테이지 데이터 큐 초기화
         stageDataQueue = new Queue<StageData>(stageDataList);
-        
-        //StartBattle();
+    }
+
+    /// <summary>
+    /// 전투 스테이지로 넘어갈 때 호출. FadeOut 연출 후 다음 스테이지로 넘어감
+    /// </summary>
+    public void PassOverBattle()
+    {
+        FadeManager.instance.FadeOut(
+            () =>
+            {
+                BattleManager.instance.StartBattle();
+            }
+        );
     }
 
 
@@ -42,6 +51,12 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public void StartBattle()
     {
+        // 선택지 UI 표시
+        SelectionUI.instance.ShowSelectionUI();
+
+        // 주사위 결과 텍스트 초기화
+        Dice.instance.InitDiceResultText();
+
         // 애니메이션 초기화 용.. 야메 ..
         battleFormation.gameObject.SetActive(false);
         battleFormation.gameObject.SetActive(true);

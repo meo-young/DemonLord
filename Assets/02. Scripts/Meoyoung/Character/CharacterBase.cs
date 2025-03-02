@@ -56,15 +56,6 @@ public class CharacterBase : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// 현재 캐릭터가 target 캐릭터에게 공격. 추상 클래스인데 설계 잘못함.
-    /// </summary>
-    /// <param name="target">공격할 대상</param>
-    public virtual void Attack(CharacterBase target)
-    {
-
-    }
-
 
     /// <summary>
     /// 최대 체력을 초과하지 않는 범위에서 현재 체력을 amount 만큼 회복복
@@ -83,7 +74,7 @@ public class CharacterBase : MonoBehaviour
 
 
     /// <summary>
-    /// 캐릭터 부활시 호출. 쓸 일이 있을지 모르겠음음
+    /// 캐릭터 부활시 호출. 쓸 일이 있을지 모르겠음
     /// </summary>
     public void OnRebirth()
     {
@@ -100,13 +91,13 @@ public class CharacterBase : MonoBehaviour
 
 
     /// <summary>
-    /// 체력 UI에 현재 체력을 반영하여여 최신화
+    /// 체력 UI에 현재 체력을 반영하여 최신화
     /// </summary>
     public void InitUI()
     {
         // 체력 UI 최신화
         TMP_Text text = GetComponentInChildren<TMP_Text>();
-        text.text = $"{maxHealth} / {currentHealth}";
+        text.text = $"{currentHealth} / {maxHealth}";
 
         Slider slider = GetComponentInChildren<Slider>();
         slider.value = ((float)currentHealth / (float)maxHealth);
@@ -115,7 +106,7 @@ public class CharacterBase : MonoBehaviour
 
 
     /// <summary>
-    /// 캐릭터 사망시 호출. 리소스를 묘비로 변경경
+    /// 캐릭터 사망시 호출. 리소스를 묘비로 변경
     /// </summary>
     protected virtual void OnDeath()
     {
@@ -124,9 +115,6 @@ public class CharacterBase : MonoBehaviour
 
         // 캐릭터 이미지 묘비로 변경
         GetComponent<SpriteRenderer>().sprite = GameManager.instance.tombstoneSprite;
-
-        // 체력 UI 비활성화
-        transform.GetChild(0).gameObject.SetActive(false);
     }
 
 

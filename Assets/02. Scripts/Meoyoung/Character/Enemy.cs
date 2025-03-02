@@ -1,11 +1,8 @@
 using UnityEngine;
 
-public class Enemy : CharacterBase
+public abstract class Enemy : CharacterBase
 {
-    public virtual void AttackPlayer()
-    {
-    
-    }
+    public abstract void AttackPlayer();
 
     public virtual void OnDeath()
     {
