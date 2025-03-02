@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class AnimationNotify : MonoBehaviour
 {
+    // 전투 시작 함수
+    public void StartBattle()
+    {
+        PartyRecruitUI.instance.HideRecruitPanel();
+        BattleManager.instance.StartBattle();
+    }
+    
     // 전투 활성화 함수
     public void ActiveBattle()
     {
@@ -29,11 +36,6 @@ public class AnimationNotify : MonoBehaviour
     // 전투가 끝난 후 파티 이탈이 종료되면 새로운 배틀 시작
     public void BattleFadeOut()
     {
-        FadeManager.instance.FadeOut(
-            () =>
-            {
-                BattleManager.instance.StartBattle();
-            }
-        );
+        BattleManager.instance.PassOverBattle();
     }
 }

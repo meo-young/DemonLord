@@ -20,8 +20,6 @@ public class PartyRecruitUI : MonoBehaviour
     [SerializeField] private GameObject[] characterImages;
     [Header("캐릭터 데이터")]
     [SerializeField] private CharacterData[] characterDatas;
-    [Header("캐릭터 체력 UI 프리팹")]
-    [SerializeField] private GameObject healthUIPrefab;
 
     [Header("모집하기 버튼")]
     [SerializeField] private Button recruitBtn;
@@ -33,18 +31,21 @@ public class PartyRecruitUI : MonoBehaviour
     [SerializeField] private GameObject[] addPositions;
 
     private int currentCharacterIndex = 0;
-    private bool isFirstRecruit = true;  // 초기 모집 여부
     private int recruitCount = 0;        // 현재 모집 횟수
 
 
+
+    /// <summary>
+    /// 캐릭터 이미지 선택 시, 모집하기 버튼 활성화 및 클릭된 캐릭터 이미지 활성화
+    /// </summary>
+    /// <param name="index"> 클릭된 캐릭터 이미지 인덱스 </param>
     public void OnClickCharacterBtn(int index)
     {
         // 모든 캐릭터 이미지 비활성화
         DeactivateCharacterImages();
 
         // 버튼 활성화
-        SetRecruitButtonTransparency(1f); // 시작 시 버튼 투명도 설정
-        recruitBtn.enabled = true;
+        recruitBtn.interactable = true;
 
         // 클릭된 캐릭터 인덱스 저장
         currentCharacterIndex = index;
@@ -53,6 +54,11 @@ public class PartyRecruitUI : MonoBehaviour
         characterImages[index].transform.localScale = Vector3.one;
     }
 
+
+
+    /// <summary>
+    /// 모집하기 버튼 클릭 시, 모집 처리
+    /// </summary>
     public void OnClickRecruitBtn()
     {
         if (currentCharacterIndex >= 0 && currentCharacterIndex < characterDatas.Length)
@@ -66,12 +72,6 @@ public class PartyRecruitUI : MonoBehaviour
             // CharacterBase 컴포넌트 추가 및 데이터 설정
             Human newCharacter = positionObject.AddComponent<Human>();
             newCharacter.SetCharacterData(selectedData);
-
-            // 체력 UI 프리팹 생성
-            GameObject healthUI = Instantiate(healthUIPrefab, positionObject.transform);
-
-            // 체력 최신화
-            newCharacter.InitUI();
             
             // 스프라이트 이미지 설정
             SpriteRenderer spriteRenderer = positionObject.GetComponent<SpriteRenderer>();
@@ -89,24 +89,31 @@ public class PartyRecruitUI : MonoBehaviour
         characterImages[currentCharacterIndex].transform.localScale = Vector3.zero;
 
         IsSuccessRecruit();
+
+        SelectionBtnDeactivate();
+
+        SelectionUI.instance.InitSelectionUI();
         
         // 모집 횟수 증가
         recruitCount++;
-
-        // 초기 모집시 2명, 이후 1명씩 모집
-        if ((isFirstRecruit && recruitCount >= 2) || (!isFirstRecruit && recruitCount >= 1))
-        {
-            HideRecruitPanel();
-            recruitCount = 0;    // 모집 횟수 초기화
-            isFirstRecruit = false;  // 초기 모집 완료 표시
-        }
 
         // 버튼 초기화
         InitBtn();
     }
 
+
+
+    /// <summary>
+    /// 동료모집 활성화
+    /// </summary>
     public void ShowRecruitPanel()
     {
+        // 모집 횟수 초기화
+        recruitCount = 0;
+
+        // 선택지 버튼 활성화
+        SelectionBtnActivate();
+
         // 모집 패널 활성화
         transform.localScale = Vector3.one;
         bottomRecruitPanel.transform.localScale = Vector3.one;
@@ -114,9 +121,15 @@ public class PartyRecruitUI : MonoBehaviour
         // 공격 선택지 패널 비활성화
         SelectionUI.instance.transform.localScale = Vector3.zero;
 
+        // 버튼 초기화
         InitBtn();
     }
 
+
+
+    /// <summary>
+    /// 동료모집 비활성화
+    /// </summary>
     public void HideRecruitPanel()
     {
         // 모집 패널 비활성화
@@ -130,28 +143,31 @@ public class PartyRecruitUI : MonoBehaviour
     
 
 
+    /// <summary>
+    /// 버튼 초기화
+    /// </summary>
     private void InitBtn()
     {
-        // 초기 모집일 때는 2명, 이후에는 1명씩 모집
-        int remainingRecruits = isFirstRecruit ? 2 - recruitCount : 1 - recruitCount;
+        // 항상 1명씩만 모집
+        int remainingRecruits = 1 - recruitCount;
         SituationUI.instance.SetSituationText($"남은 동료 모집 횟수 {remainingRecruits}명");
 
-        // 파티 멤버 가져오기 (용사 제외)
-        List<CharacterBase> partyMembers = PartyManager.instance.GetPartyMembers().Where(member => member.characterName != "용사").ToList();
+        // 파티 멤버 가져오기
+        List<CharacterBase> partyMembers = PartyManager.instance.GetPartyMembers();
 
         foreach(CharacterBase member in partyMembers)
         {
-            // 파티에 근거리가 존재할 경우 근거리 공격 선택 활성화
+            // 파티에 근거리가 존재할 경우 근거리 모집 비활성화
             if(member.characterType == CharacterType.Warrior)
             {
                 transform.GetChild(0).transform.localScale = Vector3.zero;
             }
-            // 파티에 원거리가 존재할 경우 원거리 공격 선택 활성화
+            // 파티에 원거리가 존재할 경우 원거리 모집 비활성화
             else if(member.characterType == CharacterType.Ranger)
             {
                 transform.GetChild(1).transform.localScale = Vector3.zero;
             }
-            // 파티에 마법사가 존재할 경우 마법 공격 선택 활성화
+            // 파티에 마법사가 존재할 경우 마법 모집 비활성화
             else if(member.characterType == CharacterType.Wizard)
             {
                 transform.GetChild(2).transform.localScale = Vector3.zero;
@@ -160,10 +176,14 @@ public class PartyRecruitUI : MonoBehaviour
 
         // 버튼 비활성화
         DeactivateCharacterImages();
-        SetRecruitButtonTransparency(0.2f);
-        recruitBtn.enabled = false;
+        recruitBtn.interactable = false;
     }
 
+
+
+    /// <summary>
+    /// 캐릭터 이미지 비활성화
+    /// </summary>
     private void DeactivateCharacterImages()
     {
         foreach(GameObject image in characterImages)
@@ -172,18 +192,35 @@ public class PartyRecruitUI : MonoBehaviour
         }
     }
 
-    // 버튼 투명도 설정 함수 추가
-    private void SetRecruitButtonTransparency(float alpha)
+
+    /// <summary>
+    /// 선택지 버튼 비활성화
+    /// </summary>
+    private void SelectionBtnDeactivate()
     {
-        Image buttonImage = recruitBtn.GetComponent<Image>();
-        if (buttonImage != null)
+        int childCount = transform.childCount;
+        for(int i = 0; i < childCount; i++)
         {
-            Color color = buttonImage.color;
-            color.a = alpha; // 알파값 설정 (0.6f = 60% 투명도)
-            buttonImage.color = color;
+            transform.GetChild(i).GetComponent<Button>().interactable = false;
+        }
+    }
+    
+    /// <summary>
+    /// 선택지 버튼 활성화
+    /// </summary>
+    private void SelectionBtnActivate()
+    {
+        int childCount = transform.childCount;
+        for(int i = 0; i < childCount; i++)
+        {
+            transform.GetChild(i).GetComponent<Button>().interactable = true;
         }
     }
 
+
+    /// <summary>
+    /// 모집 성공 텍스트 활성화
+    /// </summary>
     private void IsSuccessRecruit()
     {
         recruitResultText.gameObject.SetActive(false);
