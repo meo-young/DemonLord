@@ -22,7 +22,7 @@ public class AbilityWarrantUI : MonoBehaviour
 
     /// <summary>
     /// 1번째 이벤트 : 특성 UI 비활성화, 권능 UI 활성화
-    /// 2번째 이벤트 : 권능 UI 비활성화, 캔버스 비활성화
+    /// 2번째 이벤트 : 권능 UI 비활성화, 캔버스 비활성화, 동료 모집 UI 활성화
     /// </summary>
     private void Start()
     {
@@ -37,6 +37,7 @@ public class AbilityWarrantUI : MonoBehaviour
             () => {
                 warrantUI.transform.localScale = Vector3.zero;
                 this.gameObject.SetActive(false);
+                PartyRecruitUI.instance.ShowRecruitPanel();
             }
         );
     }

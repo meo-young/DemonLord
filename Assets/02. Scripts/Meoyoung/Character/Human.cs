@@ -2,10 +2,8 @@ using UnityEngine;
 
 public class Human : CharacterBase
 {
-    public override void Attack(CharacterBase target)  
+    public void AttackEnemy(Enemy target)  
     {
-        base.Attack(target);
-
         // 기본 데미지 선언
         int damage = attackPower;
 

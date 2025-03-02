@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -6,6 +7,10 @@ public class GameManager : MonoBehaviour
 
     [Header("현재 주사위 결과")]
     [SerializeField] private DiceType currentDiceResult;
+    public int currentDiceResultInt;
+
+    [Header("주사위 버튼")]
+    public Button diceButton;
 
     [Header("현재 권능")]
     [SerializeField] private IWarrant currentWarrant;
@@ -35,8 +40,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
 
     private void Start()

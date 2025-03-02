@@ -40,25 +40,17 @@ public class PartyInfoUI : MonoBehaviour
 
         // Text 컴포넌트 초기화
         texts[0].text = character.characterName;
-        texts[1].text = $"{character.maxHealth} / {character.currentHealth}";
 
         if(character.isAlive)
         {
-            texts[2].text = "생존";
-            texts[2].color = Color.green;
+            texts[1].text = "생존";
+            texts[1].color = Color.green;
         }
         else
         {
-            texts[2].text = "사망";
-            texts[2].color = Color.red;
+            texts[1].text = "사망";
+            texts[1].color = Color.red;
         }
-
-        // 슬라이더 초기화
-        Slider slider = infoObject.GetComponentInChildren<Slider>();
-        slider.maxValue = character.maxHealth;
-        slider.value = (float)(character.maxHealth / character.currentHealth)*100;
-
-        Debug.Log($"슬라이더 초기화: {slider.value}");
     }
 
     public void DestroyPartyInfo()

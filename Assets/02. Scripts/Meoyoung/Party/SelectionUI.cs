@@ -23,6 +23,17 @@ public class SelectionUI : MonoBehaviour
     }
 
 
+    public void ShowSelectionUI()
+    {
+        transform.localScale = Vector3.one;
+    }
+
+
+    public void HideSelectionUI()
+    {
+        transform.localScale = Vector3.zero;
+    }
+
 
 
     /// <summary>
@@ -112,11 +123,11 @@ public class SelectionUI : MonoBehaviour
     public void OnClickAttackBtn(int characterTypeIndex)
     {
         // int를 CharacterType enum으로 변환
-        CharacterType characterType = (CharacterType)characterTypeIndex;
+        Human human = PartyManager.instance.GetCharacterByType((CharacterType)characterTypeIndex) as Human;
         
         // 파티 공격 이벤트 추가
         BattleManager.instance.AddEventToQueue(
-            () => PartyManager.instance.GetCharacterByType(characterType).Attack(GameManager.instance.enemy)
+            () => human.AttackEnemy(GameManager.instance.enemy)
             );
 
         // 적 공격 이벤트 추가
