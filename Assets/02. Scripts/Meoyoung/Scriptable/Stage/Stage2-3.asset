@@ -15,8 +15,9 @@ MonoBehaviour:
   stageNumber: "\uC2A4\uD14C\uC774\uC9C0 2-3"
   meleeMonsterProbability: 25
   rangedMonsterProbability: 25
-  magicMonsterProbability: 10
-  trapProbability: 15
-  npcProbability: 0
+  magicMonsterProbability: 25
+  trapProbability: 10
+  npcProbability: 15
   isRecruit: 0
   isItemRecruit: 0
+  isBoss: 0

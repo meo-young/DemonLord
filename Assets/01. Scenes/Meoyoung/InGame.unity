@@ -6381,7 +6381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5373f805a47f1c45b410b6a129b829c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleBackground: {fileID: 21300000, guid: b64d62332b3e38944822ad72be5435c9, type: 3}
+  battleBackground: {fileID: 21300000, guid: a5d7742510baa8249af5a8b12f7cd846, type: 3}
   bossBackground: {fileID: 21300000, guid: ebe9bc14b4a5f174394ddd2c028199eb, type: 3}
   backgroundImage: {fileID: 1719823500}
   currentDiceResult: 0
