@@ -9,11 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ace5892a7d1b1140907578dfc249fa1, type: 3}
-  m_Name: "\uAD81\uC218"
+  m_Script: {fileID: 11500000, guid: 3737943d2a9ee5e4e887b23ffdd05271, type: 3}
+  m_Name: Stage2-2
   m_EditorClassIdentifier: 
-  characterName: "\uAD81\uC218"
-  characterType: 1
-  maxHealth: 50
-  attackPower: 10
-  characterSprite: {fileID: 21300000, guid: 527cfbfbf7d6889478e5d5d5ddae6e79, type: 3}
+  stageNumber: 2-2
+  meleeMonsterProbability: 20
+  rangedMonsterProbability: 20
+  magicMonsterProbability: 20
+  trapProbability: 30
+  npcProbability: 10
+  isRecruit: 1
+  isItemRecruit: 0
