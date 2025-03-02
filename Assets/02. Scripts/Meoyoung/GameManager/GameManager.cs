@@ -6,6 +6,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    [Header("카드 리소스")]
+    public Sprite cardBack;
+    public Sprite cardFront;
+
     [Header("뒷배경 리소스")]
     public Sprite battleBackground;
     public Sprite bossBackground;
@@ -45,20 +49,13 @@ public class GameManager : MonoBehaviour
 
     public Enemy enemy; // 현재 전투 중인 적 캐릭터
     public Player player; // 현재 플레이 중인 플레이어
+    public BossEnemy boss; // 현재 전투 중인 보스 캐릭터
     
     private IWarrant currentWarrant;
 
     private void Awake()
     {
-        if(instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        instance = this;
     }
 
     private void Start()
@@ -167,6 +164,19 @@ public class GameManager : MonoBehaviour
     public void SetWarrantButtonActive()
     {
         warrantButton.interactable = true;
+    }
+
+    // 권능 버튼 비활성화 여부 설정
+    public void SetWarrantButtonInteractable()
+    {
+        if(isWarrantUsed)
+        {
+            SetWarrantButtonDeactive();
+        }
+        else
+        {
+            SetWarrantButtonActive();
+        }
     }
 
 #endregion
