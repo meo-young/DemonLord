@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using static Constant;
 
 public class SelectionUI : MonoBehaviour
 {
@@ -129,15 +130,64 @@ public class SelectionUI : MonoBehaviour
     /// <param name="characterTypeIndex"> 공격을 진행할 캐릭터 인덱스</param>
     public void OnClickAttackBtn(int characterTypeIndex)
     {
-        // int를 CharacterType enum으로 변환
         Human human = PartyManager.instance.GetCharacterByType((CharacterType)characterTypeIndex) as Human;
 
-        // 권능 사용
         if(GameManager.instance.isWarrantActive)
         {
-            BattleManager.instance.AddEventToQueue(
-                () => GameManager.instance.UseWarrant()
-            );
+            IWarrant warrant = GameManager.instance.GetCurrentWarrant();
+            if (warrant is RandomWarrant)
+            {
+                float randomValue = Random.Range(0f, 1f);
+                
+                // 10% 확률로 모든 권능 사용
+                if (randomValue < 0.1f)
+                {
+                    BattleManager.instance.AddEventToQueue(
+                        () => {
+                            new DiceWarrant().UseWarrant();
+                            new HealWarrant().UseWarrant();
+                        }
+                    );
+                }
+                // 20% 확률로 주사위 권능
+                else if (randomValue < 0.3f)
+                {
+                    BattleManager.instance.AddEventToQueue(
+                        () => new DiceWarrant().UseWarrant()
+                    );
+                }
+                // 20% 확률로 힐 권능
+                else if (randomValue < 0.5f)
+                {
+                    BattleManager.instance.AddEventToQueue(
+                        () => new HealWarrant().UseWarrant()
+                    );
+                }
+                // 40% 확률로 아무 효과 없음
+                else if (randomValue < 0.9f)
+                {
+                    Debug.Log("아무 효과 없음 (40% 확률)");
+                }
+                // 10% 확률로 파티 전체 피해
+                else
+                {
+                    BattleManager.instance.AddEventToQueue(
+                        () => {
+                            foreach(CharacterBase member in PartyManager.instance.GetAlivePartyMembers())
+                            {
+                                member.GetDamage(RANDOM_WARRANT_DAMAGE_AMOUNT);
+                            }
+                        }
+                    );
+                }
+            }
+            else
+            {
+                // RandomWarrant가 아닌 경우 기존처럼 권능 사용
+                BattleManager.instance.AddEventToQueue(
+                    () => GameManager.instance.UseWarrant()
+                );
+            }
         }
         
         // 파티 공격 이벤트 추가
@@ -150,11 +200,12 @@ public class SelectionUI : MonoBehaviour
         // 적 공격 이벤트 추가
         BattleManager.instance.AddEventToQueue(
             () => GameManager.instance.enemy.AttackPlayer()
-            );
+        );
 
         // 이벤트 큐 처리
         BattleManager.instance.StartEventProcess();
     }
+
 
 
 
