@@ -54,7 +54,7 @@ public class CutSceneUI : LDHBaseUI
     {
         SetNext();
     }
-
+    [Header("출력 속도")]
     [SerializeField] private float typingSpeed = 0.05f;
     private Coroutine typingCoroutine;
     private string CompleteText;
@@ -62,10 +62,16 @@ public class CutSceneUI : LDHBaseUI
     private IEnumerator TypeText(string fullText)
     {
         if (m_Text.text != "") m_Text.text += "\n";
+
+        // 꺽쇠 괄호 플래그
+        bool LFlag = false;
         foreach (char letter in fullText)
         {
             m_Text.text += letter;
-            if (letter != '\\')
+            if (letter == '<') LFlag = true;
+            if (letter == '>') LFlag = false;
+            if (letter == '\\') continue;
+            if (LFlag) continue;
                 yield return new WaitForSeconds(typingSpeed);
         }
         typingCoroutine = null;
