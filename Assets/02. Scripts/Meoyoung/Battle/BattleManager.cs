@@ -97,7 +97,10 @@ public class BattleManager : MonoBehaviour
 
             // 적 공격 이벤트 추가
             AddEventToQueue(
-                () => GameManager.instance.enemy.AttackPlayer()
+                () => {
+                    GameManager.instance.boss.AttackPlayer();
+                    GameManager.instance.SetInactiveWarrant();
+                }
             );
 
             // 이벤트 큐 처리
@@ -112,10 +115,7 @@ public class BattleManager : MonoBehaviour
             SelectionUI.instance.SetActiveSelectionUI();
         }
 
-        if(!GameManager.instance.isWarrantUsed)
-        {
-            GameManager.instance.SetWarrantButtonActive();
-        }
+        GameManager.instance.SetWarrantButtonInteractable();
 
         // 주사위 결과 텍스트 초기화
         Dice.instance.InitDiceBtn();
@@ -234,7 +234,16 @@ public class BattleManager : MonoBehaviour
         // 모집 여부 체크
         if(currentStage.isRecruit)
         {
-            PartyRecruitUI.instance.ShowRecruitPanel();
+            if(PartyManager.instance.GetPartyMemberNum() >= 3)
+            {
+                // 다음 스테이지 데이터 처리
+                ProcessNextStageData();
+                Debug.Log("모든 동료를 모집했습니다.");
+            }
+            else
+            {
+                PartyRecruitUI.instance.ShowRecruitPanel();
+            }
             return;
         }
 
@@ -282,18 +291,10 @@ public class BattleManager : MonoBehaviour
         // NPC 확률 체크
         else if (randomValue < (probabilitySum += currentStage.npcProbability))
         {
-            if(PartyManager.instance.GetPartyMemberNum() >= 3)
-            {
-                // 다음 스테이지 데이터 처리
-                ProcessNextStageData();
-                Debug.Log("모든 동료를 모집했습니다.");
-            }
-            else
-            {
-                Debug.Log($"NPC 조우! (확률: {currentStage.npcProbability}%)");
-                AudioManager.instance.PlayBGM(BGM.bgm_item);
-                NPCSelectionUI.instance.ShowNPCSelectionUI();
-            }
+
+            Debug.Log($"NPC 조우! (확률: {currentStage.npcProbability}%)");
+            AudioManager.instance.PlayBGM(BGM.bgm_item);
+            NPCSelectionUI.instance.ShowNPCSelectionUI();
             return;
         }
 

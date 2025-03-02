@@ -9,6 +9,7 @@ public class BossEnemy : Enemy
     {
         if(isAlive == false) return;
 
+
         // 기본 데미지 선언
         int damage = attackPower;
 
@@ -20,6 +21,20 @@ public class BossEnemy : Enemy
 
         // 랜덤으로 타겟 할당
         CharacterBase target = SetRandomTarget();
+
+        // characterType에 따라 다른 이펙트 출력
+        switch(characterType)
+        {
+            case CharacterType.Warrior:
+                VFXManager.instance.ShowEffect(EffectType.Boss_Fire, target.transform.position);
+                break;
+            case CharacterType.Ranger:
+                VFXManager.instance.ShowEffect(EffectType.Boss_Ice, target.transform.position);
+                break;
+            case CharacterType.Wizard:
+                VFXManager.instance.ShowEffect(EffectType.Boss_Plain, target.transform.position);
+                break;
+        }
 
         // 상성 적용
         Applycompatibility(target, ref damage);
@@ -48,7 +63,7 @@ public class BossEnemy : Enemy
         // 전투 승리
         BattleManager.instance.BattleWin();
 
-        Invoke("NextScene", 5f);
+        Invoke("NextScene", 11f);
     }
 
     private void NextScene()
@@ -82,7 +97,7 @@ public class BossEnemy : Enemy
     /// </summary>
     private void SetRandomCharacterType()
     {
-        int randomValue = Random.Range(0, 4);
+        int randomValue = Random.Range(0, 3);
 
         switch(randomValue)
         {

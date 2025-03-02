@@ -129,4 +129,7 @@ public enum EffectType
     Energe_Range,
     Energe_Magic,
     Mouse_Click,
+    Boss_Fire,
+    Boss_Ice,
+    Boss_Plain
 }

@@ -12,14 +12,7 @@ public class PartyInfoUI : MonoBehaviour
 
     private void Awake()
     {
-        if(instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        instance = this;
     }
 
     public void AddPartyInfo(CharacterBase character, int index)

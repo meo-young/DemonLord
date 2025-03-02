@@ -6,6 +6,8 @@ public class TitleManager : MonoBehaviour
     [Header("시작 클릭 시 넘어갈 씬 이름")]
     [SerializeField] private string startSceneName;
 
+    public Transform gameDescriptionPanel;
+
     void Start()
     {
         AudioManager.instance.PlayBGM(BGM.bgm_Title);
@@ -35,9 +37,16 @@ public class TitleManager : MonoBehaviour
         );
     }
 
-    public void OnCreditButtonClick()
+
+    public void OnGameDescriptionButtonClick()
     {
-        // @To-do 크레딧 화면 표시
-        Debug.Log("크레딧 화면 표시");
+        if(gameDescriptionPanel.localScale == Vector3.zero)
+        {
+            gameDescriptionPanel.localScale = Vector3.one;
+        }
+        else
+        {
+            gameDescriptionPanel.localScale = Vector3.zero;
+        }
     }
 }

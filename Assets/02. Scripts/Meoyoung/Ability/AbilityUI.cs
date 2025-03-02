@@ -10,6 +10,8 @@ public class AbilityUI : MonoBehaviour
     [Header("현재 특성 설명 텍스트")]
     [SerializeField] private TMP_Text currentAbilityText;
 
+    public Image[] abilityCard;
+
     private int currentAbilityCount = -1;
 
 
@@ -22,6 +24,8 @@ public class AbilityUI : MonoBehaviour
     {
         currentAbilityCount = count;
         confirmAbilityButton.interactable = true;
+
+        InitAbilityUI();
     }
 
 
@@ -49,5 +53,25 @@ public class AbilityUI : MonoBehaviour
     private void DeactiveAbilityUI()
     {
         AbilityWarrantUI.instance.ProcessEventQueue();
+    }
+
+
+
+    /// <summary>
+    /// 특성 UI 초기화
+    /// </summary>
+    private void InitAbilityUI()
+    {
+        if(currentAbilityCount < 0 || currentAbilityCount >= abilityCard.Length)
+        {
+            return;
+        }
+
+        foreach(Image card in abilityCard)
+        {
+            card.sprite = GameManager.instance.cardBack;
+        }
+
+        abilityCard[currentAbilityCount].sprite = GameManager.instance.cardFront;
     }
 }
