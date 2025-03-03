@@ -1,10 +1,21 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class AbilityWarrantUI : MonoBehaviour
 {
     public static AbilityWarrantUI instance;
+
+    public Image card_1;
+    public Image card_2;
+    public Image card_3;
+    public Image card_4;
+
+    public Sprite focusCardFirst;
+    public Sprite focusCardSecond;
+    public Sprite backCardFirst;
+    public Sprite backCardSecond;
 
     private WarrantUI warrantUI;
     private AbilityUI abilityUI;
@@ -28,6 +39,13 @@ public class AbilityWarrantUI : MonoBehaviour
     {
         eventQueue.Enqueue(
             () => {
+                
+                card_1.sprite = backCardFirst;
+                card_2.sprite = backCardSecond;
+                card_3.sprite = focusCardFirst;
+                card_4.sprite = focusCardSecond;
+
+                
                 abilityUI.transform.localScale = Vector3.zero;
                 warrantUI.transform.localScale = Vector3.one;
             }
