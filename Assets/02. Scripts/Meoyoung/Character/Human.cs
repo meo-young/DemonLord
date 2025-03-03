@@ -5,6 +5,19 @@ public class Human : CharacterBase
     public void AttackEnemy(Enemy target)  
     {
 
+        switch(characterType)
+        {
+            case CharacterType.Warrior:
+                VFXManager.instance.ShowEffect(EffectType.Energe_Melee, target.transform.position);
+                break;
+            case CharacterType.Ranger:
+                VFXManager.instance.ShowEffect(EffectType.Energe_Range, target.transform.position);
+                break;
+            case CharacterType.Wizard:
+                VFXManager.instance.ShowEffect(EffectType.Energe_Magic, target.transform.position);
+                break;
+        }
+
         // 기본 데미지 선언
         int damage = attackPower;
 
