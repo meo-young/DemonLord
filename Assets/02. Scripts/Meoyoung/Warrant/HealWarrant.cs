@@ -13,6 +13,7 @@ public class HealWarrant : MonoBehaviour, IWarrant
         // 체력이 가장 낮은 캐릭터를 healAmount만큼 회복
         PartyManager.instance.GetWorstHealthCharacter().Heal(HEAL_WARRANT_HEAL_AMOUNT);
 
+        GameManager.instance.isWarrantUsed = true;
         GameManager.instance.isWarrantActive = false;
         GameManager.instance.SetWarrantButtonDeactive();
     }

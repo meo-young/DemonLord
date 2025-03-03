@@ -59,6 +59,7 @@ public class RandomWarrant : MonoBehaviour, IWarrant
             }
         }
 
+        GameManager.instance.isWarrantUsed = true;
         GameManager.instance.isWarrantActive = false;
         GameManager.instance.SetWarrantButtonDeactive();
     }   

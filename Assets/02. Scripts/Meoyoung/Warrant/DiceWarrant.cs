@@ -12,6 +12,7 @@ public class DiceWarrant : MonoBehaviour, IWarrant
         GameManager.instance.currentDiceResultInt = 12;
         Dice.instance.SetDiceResultText(GameManager.instance.currentDiceResultInt);
 
+        GameManager.instance.isWarrantUsed = true;
         GameManager.instance.isWarrantActive = false;
         GameManager.instance.SetWarrantButtonDeactive();
     }
