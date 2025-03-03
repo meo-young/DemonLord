@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Test_Sound : MonoBehaviour
+public class Test_Audio : MonoBehaviour
 {
     void Start()
     {

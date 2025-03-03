@@ -203,8 +203,12 @@ public class AudioManager : MonoBehaviour
         {
             currentBGMSource = bgmPlayer[bgm];
             currentBGMSource.Play();
-            if (isFade) yield return CoAudioFadeIn(currentBGMSource, fadeSec);
-            currentBGMSource.volume = MasterVolume;
+            if (!IsMute)
+            {
+                if (isFade) yield return CoAudioFadeIn(currentBGMSource, fadeSec);
+                currentBGMSource.volume = MasterVolume;
+            }
+            else { currentBGMSource.volume = 0f; }
         }
     }
     // 일시정지
@@ -298,6 +302,8 @@ public class AudioManager : MonoBehaviour
     // Volume을 sec초에 걸쳐 masterVolume으로 수렴
     private IEnumerator CoAudioFadeIn(AudioSource audioSource, float sec)
     {
+        if (IsMute) yield return null;
+
         yield return CoChangeVolume(audioSource, sec, audioSource.volume, MasterVolume);
     }
     IEnumerator CoChangeVolume(AudioSource audioSource, float sec, float startVolume, float endVolume)
