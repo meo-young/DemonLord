@@ -42,19 +42,6 @@ public class CharacterBase : MonoBehaviour
     /// <param name="damage">적용할 데미지</param>
     public virtual void GetDamage(int damage)
     {
-        // characterType에 따라 다른 이펙트 출력
-        switch(characterType)
-        {
-            case CharacterType.Warrior:
-                VFXManager.instance.ShowEffect(EffectType.Damage_Melee, transform.position);
-                break;
-            case CharacterType.Ranger:
-                VFXManager.instance.ShowEffect(EffectType.Damage_Range, transform.position);
-                break;
-            case CharacterType.Wizard:
-                VFXManager.instance.ShowEffect(EffectType.Damage_Magic, transform.position);
-                break;
-        }
 
         // 데미지 적용
         currentHealth -= damage;

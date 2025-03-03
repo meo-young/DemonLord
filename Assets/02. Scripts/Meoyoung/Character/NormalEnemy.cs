@@ -36,6 +36,19 @@ public class NormalEnemy : Enemy
             target = GameManager.instance.player;
         }
 
+        switch(characterType)
+        {
+            case CharacterType.Warrior:
+                VFXManager.instance.ShowEffect(EffectType.Damage_Melee, target.transform.position);
+                break;
+            case CharacterType.Ranger:
+                VFXManager.instance.ShowEffect(EffectType.Damage_Range, target.transform.position);
+                break;
+            case CharacterType.Wizard:
+                VFXManager.instance.ShowEffect(EffectType.Damage_Magic, target.transform.position);
+                break;
+        }
+
         // 상성 적용
         Applycompatibility(target, ref damage);
 
