@@ -1,15 +1,17 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SoundSettingUI : MonoBehaviour
 {
     [Header("UI Elements")]
     public GameObject settingPanel; // 설정 패널 (토글 버튼 클릭 시 활성화/비활성화)
-    public Button settingButton;    // 설정 토글 버튼
-    public Button settingButton2;    // 설정 열기 버튼
-    public Button settingButton3;    // 설정 열기 버튼
-    public Toggle muteToggle;       // Mute 체크 버튼
-    public Slider volumeSlider;     // 볼륨 조절 슬라이더
+    public Button settingButton; // 설정 토글 버튼
+    public Button settingButton2; // 설정 열기 버튼
+    public Button settingButton3; // 설정 열기 버튼
+    public Toggle muteToggle; // Mute 체크 버튼
+    public Slider volumeSlider; // 볼륨 조절 슬라이더
+    public Button lobbyButton; // 로비 버튼
 
     private void Start()
     {
@@ -26,6 +28,7 @@ public class SoundSettingUI : MonoBehaviour
         settingButton3.onClick.AddListener(ToggleSettingPanel);
         muteToggle.onValueChanged.AddListener(ToggleMute);
         volumeSlider.onValueChanged.AddListener(ChangeVolume);
+        lobbyButton.onClick.AddListener(() => SceneManager.LoadScene("Meoyoung"));
     }
 
     // 설정 UI 활성화/비활성화
